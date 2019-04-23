@@ -23,6 +23,7 @@
               "src/assets"
             ],
             "styles": [
+              "node_modules/bootstrap/dist/css/bootstrap.min.css",
               "src/styles.css"
             ],
             "scripts": [],
@@ -132,5 +133,8 @@
       }
     }
   },
-  "defaultProject": "twitter-ui-posts"
+  "defaultProject": "twitter-ui-posts",
+  "cli": {
+    "defaultCollection": "@ngrx/schematics"
+  }
 }

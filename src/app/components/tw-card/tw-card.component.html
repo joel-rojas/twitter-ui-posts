@@ -1,0 +1,14 @@
+<div class="card">
+  <div class="card-body">
+    <h5 class="card-title">{{tweet.user.name}}</h5>
+    <h6 class="card-subtitle mb-2 text-muted">
+      <a class="card-link" [href]="'https://twitter.com/' + tweet.user.screen_name" target="_blank">@{{tweet.user.screen_name}}</a>
+    </h6>
+    <p class="card-text">{{tweet.text}}</p>
+    <p class="card-text"><small class="text-muted">{{tweet.created_at | date:'medium'}}</small></p>
+    <div class="link-ctn">
+      <a class="card-link" [href]="'https://twitter.com/' + tweet.user.screen_name + '/status/' + tweet.id_str" target="_blank">Open it on Twitter</a>
+      <a href="#" class="card-link">Another link</a>
+    </div>
+  </div>
+</div>
