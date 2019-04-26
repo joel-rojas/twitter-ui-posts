@@ -2,10 +2,6 @@
   display: inherit;
 }
 
-.tw-posts-drag-drop--ctn-list {
-  flex-wrap: nowrap;
-}
-
 .tw-posts-drag-drop--ctn-list--item {
   margin: 0;
 }
