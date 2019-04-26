@@ -62,6 +62,21 @@ export function reducer(
       return Object.assign({}, adapter.addAll(twitterPosts, state), {users});
     }
 
+    case TwitterActionTypes.SwitchTwitterPosts: {
+      const {previousIndex, currentIndex} = action.payload;
+      const {users} = state;
+      const newUsers = users.map(user => ({...user}))
+        .map((user, idx, arr) => {
+          if (arr[idx] === arr[previousIndex]) {
+            return arr[currentIndex];
+          } else if (arr[idx] === arr[currentIndex]) {
+            return arr[previousIndex];
+          }
+          return user;
+        });
+      return {...state, users: newUsers};
+    }
+
     case TwitterActionTypes.ClearTwitters: {
       return adapter.removeAll(state);
     }

@@ -8,7 +8,8 @@ import { TwitterPosts, TwitterPostsModel } from './../../store/twitter/twitter.m
   providedIn: 'root'
 })
 export class ApiService {
-  readonly baseURL: string = 'http://127.0.0.1:7890/api/';
+  // readonly baseURL: string = 'http://127.0.0.1:7890/api/';
+  readonly baseURL: string = 'http://18.223.132.65/api/';
   readonly twitterUsers: string[] = [...this.twitterPostModel.twitterUsers];
   constructor(private http: HttpClient, private twitterPostModel: TwitterPostsModel) { }
   fetchTwitterUsersData(): Observable<TwitterPosts[]> {

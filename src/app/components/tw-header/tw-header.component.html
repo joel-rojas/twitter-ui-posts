@@ -12,6 +12,9 @@
           </a>
           <div class="dropdown-menu" aria-labelledby="editLayoutLink" *ngIf="openEditLayout" >
             <a class="dropdown-item" href="#">Action</a>
+            <div class="dropdown-item">
+                <app-tw-switch-btn (switchBtn)="onSwitchBtnEvent($event)"></app-tw-switch-btn>
+            </div>
             <a class="dropdown-item" href="#">Another action</a>
             <a class="dropdown-item" href="#">Something else here</a>
           </div>

@@ -1,6 +1,10 @@
 <div class="col-12">
-    <div class="row">
-      <div *ngFor="let user of userPosts;" class="col-lg-4">
+    <div class="row tw-posts-drag-drop--ctn-list"
+      cdkDropList
+      [cdkDropListDisabled]="!enableOrderColumn"
+      cdkDropListOrientation="horizontal"
+      (cdkDropListDropped)="onDropTwitterUsersPosts($event)">
+      <div *ngFor="let user of userPosts;" cdkDrag [ngClass]="dragDropListCSS" class="col-lg-4 tw-posts-drag-drop--ctn-list--item">
         <h3>{{user.user}}</h3>
         <app-tw-card *ngFor="let post of user.posts" [tweet]="post"></app-tw-card>
       </div>
