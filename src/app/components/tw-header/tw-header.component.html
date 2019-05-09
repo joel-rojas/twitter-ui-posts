@@ -12,7 +12,28 @@
           </a>
           <div class="dropdown-menu" aria-labelledby="editLayoutLink" *ngIf="openEditLayout" >
             <div class="dropdown-item order-column-item">
-                <app-tw-switch-btn (switchBtn)="onSwitchBtnEvent($event)"></app-tw-switch-btn>
+              <app-tw-switch-btn (switchBtn)="onSwitchBtnEvent($event)"></app-tw-switch-btn>
+            </div>
+            <div class="dropdown-item">
+              <h6>Increase/Decrease Tweets</h6>
+              <app-tw-incdec-cards
+                [value]="firstTwColumnQty"
+                [label]="firstTwColumnLbl"
+                (decreaseValue)="onDecreaseFirstValue($event)"
+                (increaseValue)="onIncreaseFirstValue($event)">
+              </app-tw-incdec-cards>
+              <app-tw-incdec-cards
+                [value]="secondTwColumnQty"
+                [label]="secondTwColumnLbl"
+                (decreaseValue)="onDecreaseSecondValue($event)"
+                (increaseValue)="onIncreaseSecondValue($event)">
+              </app-tw-incdec-cards>
+              <app-tw-incdec-cards
+                [value]="thirdTwColumnQty"
+                [label]="thirdTwColumnLbl"
+                (decreaseValue)="onDecreaseThirdValue($event)"
+                (increaseValue)="onIncreaseThirdValue($event)">
+              </app-tw-incdec-cards>
             </div>
             <a class="dropdown-item" href="#">Another action</a>
             <a class="dropdown-item" href="#">Something else here</a>

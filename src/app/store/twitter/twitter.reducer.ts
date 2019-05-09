@@ -77,6 +77,17 @@ export function reducer(
       return {...state, users: newUsers};
     }
 
+    case TwitterActionTypes.ModifyTwitterPostsQty: {
+      const twitterPostsModel = new TwitterPostsModel();
+      const {index, value} = action.payload;
+      const {users, entities} = state;
+      const {user} = users[index];
+      const userPosts = twitterPostsModel.getTwitterPostsByUser(user, entities);
+      const newUsers = twitterPostsModel.getClonedUsersData(users);
+      newUsers[index].posts = userPosts.slice(0, value);
+      return {...state, users: newUsers};
+    }
+
     case TwitterActionTypes.ClearTwitters: {
       return adapter.removeAll(state);
     }

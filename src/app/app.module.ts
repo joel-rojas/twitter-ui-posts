@@ -21,6 +21,7 @@ import { TwHeaderComponent } from './components/tw-header/tw-header.component';
 import { TwFooterComponent } from './components/tw-footer/tw-footer.component';
 import { TwBodyComponent } from './components/tw-body/tw-body.component';
 import { TwSwitchBtnComponent } from './components/tw-switch-btn/tw-switch-btn.component';
+import { TwIncdecCardsComponent } from './components/tw-incdec-cards/tw-incdec-cards.component';
 
 @NgModule({
   declarations: [
@@ -31,7 +32,8 @@ import { TwSwitchBtnComponent } from './components/tw-switch-btn/tw-switch-btn.c
     TwBodyComponent,
     TwPostsComponent,
     TwCardContainerComponent,
-    TwSwitchBtnComponent
+    TwSwitchBtnComponent,
+    TwIncdecCardsComponent
   ],
   imports: [
     BrowserModule,

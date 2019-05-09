@@ -33,6 +33,12 @@
   width: 100%;
 }
 
+.navbar-expand-lg .navbar-collapse > form .dropdown-menu .dropdown-item.active,
+.navbar-expand-lg .navbar-collapse > form .dropdown-menu .dropdown-item:active {
+  background: transparent;
+  color: #212529;
+}
+
 @media (min-width: 992px) {
   .navbar-expand-lg .navbar-collapse > form {
     justify-content: flex-end;

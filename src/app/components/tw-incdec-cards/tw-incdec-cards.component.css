@@ -1,0 +1,31 @@
+.incdec-ctn {
+  padding: 5px 0;
+}
+
+.incdec-ctn .form-group {
+  justify-content: center;
+}
+
+.incdec-ctn .form-group > label.col-form-label {
+  padding: 5px 10px;
+}
+
+.incdec-ctn .form-group button:nth-child(1) {
+  border-radius: 5px 0 0 5px;
+}
+
+.incdec-ctn .form-group input.form-control {
+  height: 44px;
+  width: 44px;
+  vertical-align: unset;
+  border-radius: 0;
+}
+
+.incdec-ctn .form-group input.form-control:disabled,
+.incdec-ctn .form-group input.form-control[readonly] {
+  background: white;
+}
+
+.incdec-ctn .form-group button:nth-child(3) {
+  border-radius: 0 5px 5px 0;
+}
