@@ -1,4 +1,5 @@
-import { Component, OnInit, Input, EventEmitter, Output, SimpleChanges, OnChanges } from '@angular/core';
+import { Component, OnInit, Input, EventEmitter, Output, SimpleChanges, OnChanges, ChangeDetectionStrategy,
+  ChangeDetectorRef } from '@angular/core';
 import { CdkDragDrop } from '@angular/cdk/drag-drop';
 
 @Component({
@@ -11,13 +12,12 @@ export class TwCardContainerComponent implements OnInit, OnChanges {
   @Input() enableOrderColumn: boolean;
   @Input() userPosts;
   @Output() dragDropTwitterPostsColumn: EventEmitter<any> = new EventEmitter(null);
-  constructor() { }
+  constructor(private changeDetectorRef: ChangeDetectorRef) { }
 
   ngOnInit() {}
   ngOnChanges(changes: SimpleChanges) {
     for (const propName in changes) {
       if (changes[propName]) {
-        const chng = changes[propName];
         if (propName === 'enableOrderColumn') {
           this.setDragDropListCSSClasses();
         }

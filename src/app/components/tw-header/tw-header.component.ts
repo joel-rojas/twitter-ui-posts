@@ -1,5 +1,4 @@
-import { Component, OnInit, Output, EventEmitter, OnDestroy} from '@angular/core';
-import { MatSlideToggleChange } from '@angular/material/slide-toggle';
+import { Component, OnInit, Output, EventEmitter, OnDestroy, AfterContentInit } from '@angular/core';
 import { BehaviorSubject, Subscription } from 'rxjs';
 import { PostService } from '../../services/ui/post.service';
 
@@ -8,15 +7,20 @@ import { PostService } from '../../services/ui/post.service';
   templateUrl: './tw-header.component.html',
   styleUrls: ['./tw-header.component.css']
 })
-export class TwHeaderComponent implements OnInit, OnDestroy {
+export class TwHeaderComponent implements OnInit, OnDestroy, AfterContentInit {
   public firstColSubject: BehaviorSubject<number>;
   public firstColSubscription: Subscription;
   public firstTwColumnLbl = 'First Column';
   public firstTwColumnQty: number;
+  public isButtonSwitched = false;
   public secondColSubject: BehaviorSubject<number>;
   public secondColSubscription: Subscription;
   public secondTwColumnLbl = 'Second Column';
   public secondTwColumnQty: number;
+  public switchCls = 'menu-switch-btn';
+  public switchLabel = 'Order Columns';
+  public switchLabelPosition = 'before';
+  public switchDescription = `Drag n' drop twitter posts columns while the switch is on.`;
   public thirdColSubject: BehaviorSubject<number>;
   public thirdColSubscription: Subscription;
   public thirdTwColumnLbl = 'Third Column';
@@ -25,7 +29,6 @@ export class TwHeaderComponent implements OnInit, OnDestroy {
   public menuNavbarCSSClasses;
   public openEditLayout = false;
   public openNavbar = true;
-  @Output() switchBtn: EventEmitter<MatSlideToggleChange> = new EventEmitter(null);
   constructor(private postService: PostService) {
     this.firstColSubject = this.postService.firstColumnQtySubject;
     this.secondColSubject = this.postService.secondColumnQtySubject;
@@ -43,6 +46,9 @@ export class TwHeaderComponent implements OnInit, OnDestroy {
     this.secondColSubscription.unsubscribe();
     this.thirdColSubscription.unsubscribe();
   }
+  ngAfterContentInit() {
+    this.onSwitchBtnEvent(this.isButtonSwitched);
+  }
   setComponentUIBehavior() {
     this.menuNavbarCSSClasses = {
       'collapse': this.openNavbar
@@ -50,6 +56,36 @@ export class TwHeaderComponent implements OnInit, OnDestroy {
     this.openEditLayout = !this.openNavbar && this.openEditLayout;
   }
   // Events
+  onClickSwitchContainerEvent() {
+    this.isButtonSwitched = !this.isButtonSwitched;
+  }
+  onDecreaseFirstValueEvent(event: number) {
+    this.firstTwColumnQty = this.postService.decreasePostsQtyValue(event);
+    this.postService.saveFirstColumnQtyValue(this.firstTwColumnQty);
+  }
+  onDecreaseSecondValueEvent(event: number) {
+    this.secondTwColumnQty = this.postService.decreasePostsQtyValue(event);
+    this.postService.saveSecondColumnQtyValue(this.secondTwColumnQty);
+  }
+  onDecreaseThirdValueEvent(event: number) {
+    this.thirdTwColumnQty = this.postService.decreasePostsQtyValue(event);
+    this.postService.saveThirdColumnQtyValue(this.thirdTwColumnQty);
+  }
+  onIncreaseFirstValueEvent(event: number) {
+    this.firstTwColumnQty = this.postService.increasePostsQtyValue(event);
+    this.postService.saveFirstColumnQtyValue(this.firstTwColumnQty);
+  }
+  onIncreaseSecondValueEvent(event: number) {
+    this.secondTwColumnQty = this.postService.increasePostsQtyValue(event);
+    this.postService.saveSecondColumnQtyValue(this.secondTwColumnQty);
+  }
+  onIncreaseThirdValueEvent(event: number) {
+    this.thirdTwColumnQty = this.postService.increasePostsQtyValue(event);
+    this.postService.saveThirdColumnQtyValue(this.thirdTwColumnQty);
+  }
+  onSwitchBtnEvent(event: boolean) {
+    this.postService.saveOrderColumnSwitchValue(event);
+  }
   openEditLayoutEvent() {
     this.openEditLayout = !this.openEditLayout;
   }
@@ -57,39 +93,9 @@ export class TwHeaderComponent implements OnInit, OnDestroy {
     this.openNavbar = !this.openNavbar;
     this.setComponentUIBehavior();
   }
-  onSwitchBtnEvent(event: MatSlideToggleChange) {
-    this.postService.saveOrderColumnSwitchValue(event);
-  }
-  onDecreaseFirstValue(event: number) {
-    this.firstTwColumnQty = this.postService.decreasePostsQtyValue(event);
-    this.postService.saveFirstColumnQtyValue(this.firstTwColumnQty);
-  }
-  onDecreaseSecondValue(event: number) {
-    this.secondTwColumnQty = this.postService.decreasePostsQtyValue(event);
-    this.postService.saveSecondColumnQtyValue(this.secondTwColumnQty);
-  }
-  onDecreaseThirdValue(event: number) {
-    this.thirdTwColumnQty = this.postService.decreasePostsQtyValue(event);
-    this.postService.saveThirdColumnQtyValue(this.thirdTwColumnQty);
-  }
-  onIncreaseFirstValue(event: number) {
-    this.firstTwColumnQty = this.postService.increasePostsQtyValue(event);
-    this.postService.saveFirstColumnQtyValue(this.firstTwColumnQty);
-  }
-  onIncreaseSecondValue(event: number) {
-    this.secondTwColumnQty = this.postService.increasePostsQtyValue(event);
-    this.postService.saveSecondColumnQtyValue(this.secondTwColumnQty);
-  }
-  onIncreaseThirdValue(event: number) {
-    this.thirdTwColumnQty = this.postService.increasePostsQtyValue(event);
-    this.postService.saveThirdColumnQtyValue(this.thirdTwColumnQty);
-  }
   private changeColValueBySubscription(colName: string) {
     return (value: number) => {
-      // this[colName] = 30;
-      // if (value) {
       this[colName] = value || 30;
-      // }
     };
   }
 }

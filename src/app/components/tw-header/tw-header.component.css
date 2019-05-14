@@ -60,4 +60,11 @@
   .navbar-expand-lg .navbar-collapse > form .dropdown-menu .dropdown-item.order-column-item {
     display: block;
   }
+  .navbar-expand-lg .navbar-collapse > form .dropdown-menu .dropdown-item.order-column-item app-tw-switch-btn {
+    display: inherit;
+    margin: -0.25rem -1.5rem;
+  }
+  .navbar-expand-lg .navbar-collapse > form .dropdown-menu .dropdown-item.order-column-item p {
+    font-size: 0.875rem;
+  }
 }

@@ -1,13 +1,12 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 
 @Injectable({
   providedIn: 'root'
 })
 export class PostService {
   public firstColumnQtySubject: BehaviorSubject<number> = new BehaviorSubject(null);
-  public orderColumnSwitchSubject: BehaviorSubject<MatSlideToggleChange> = new BehaviorSubject(null);
+  public orderColumnSwitchSubject: BehaviorSubject<boolean> = new BehaviorSubject(null);
   public secondColumnQtySubject: BehaviorSubject<number> = new BehaviorSubject(null);
   public thirdColumnQtySubject: BehaviorSubject<number> = new BehaviorSubject(null);
   constructor() { }
@@ -49,7 +48,7 @@ export class PostService {
   saveThirdColumnQtyValue(value: number) {
     this.saveSubject(this.thirdColumnQtySubject, value);
   }
-  saveOrderColumnSwitchValue(value: MatSlideToggleChange) {
+  saveOrderColumnSwitchValue(value: boolean) {
     this.saveSubject(this.orderColumnSwitchSubject, value);
   }
   private clearSubject(subject: BehaviorSubject<any>) {

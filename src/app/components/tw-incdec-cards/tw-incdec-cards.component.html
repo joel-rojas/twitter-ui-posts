@@ -1,10 +1,12 @@
-<div class="incdec-ctn row">
-  <div class="col-12">
-    <div class="form-group row">
-      <label class="col col-form-label">{{label}}</label>
-      <div class="incdec-group">
+<div class="incdec-ctn form-row">
+  <div class="form-group">
+    <label class="col-form-label">{{label}}</label>
+    <div class="input-group incdec-group">
+      <div class="input-group-prepend">
         <button type="button" class="form-control btn btn-lg btn-primary" (click)="onDecreaseValueEvent()" [disabled]="disableDecrementBtn">-</button>
-        <input type="number" class="form-control" [value]="value" [disabled]="disableInput"/>
+      </div>
+      <input type="number" class="form-control" [value]="value" [disabled]="disableInput"/>
+      <div class="input-group-append">
         <button type="button" class="form-control btn btn-lg btn-primary" (click)="onIncreaseValueEvent()" [disabled]="disableIncrementBtn">+</button>
       </div>
     </div>

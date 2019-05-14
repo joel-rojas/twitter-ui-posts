@@ -1,40 +1,53 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { MatSlideToggleChange } from '@angular/material/slide-toggle';
+import { Component, OnInit, Input, Output, EventEmitter, AfterContentChecked } from '@angular/core';
 
 @Component({
   selector: 'app-tw-switch-btn',
   templateUrl: './tw-switch-btn.component.html',
   styleUrls: ['./tw-switch-btn.component.css']
 })
-export class TwSwitchBtnComponent implements OnInit {
-  @Input() cssClasses: any;
-  @Input() color: string;
-  @Input() checked: boolean;
-  @Input() labelPosition: string;
-  @Input() disabled: boolean;
-  @Output() switchBtn: EventEmitter<MatSlideToggleChange> = new EventEmitter(null);
-  public defaultSlideConfig: {cssClasses: any, color: string, checked: boolean, labelPosition: string, disabled: boolean} =
+export class TwSwitchBtnComponent implements OnInit, AfterContentChecked {
+  public defaultSlideConfig: {className: string, checked: boolean, description: string, disabled: boolean, label: string,
+    labelPosition: string } =
     {
-      cssClasses: {},
-      color: 'primary',
       checked: false,
-      labelPosition: 'before',
-      disabled: false
+      className: '',
+      description: null,
+      disabled: false,
+      label: '',
+      labelPosition: 'before'
     };
+  public hasDescription: boolean;
+  public isLeftPosition: boolean;
+  public isRightPosition: boolean;
+  @Input() label: string;
+  @Input() labelPosition: string;
+  @Input() className: string;
+  @Input() checked: boolean;
+  @Input() description: string;
+  @Input() disabled: boolean;
+  @Output() switchBtn: EventEmitter<boolean> = new EventEmitter(null);
+  public switchButtonCls;
   constructor() { }
 
   ngOnInit() {
     this.setSlideConfig();
   }
+  ngAfterContentChecked() {
+    this.switchButtonCls = {'switch-btn-on': this.checked, 'switch-btn-off': !this.checked };
+  }
   setSlideConfig() {
-    this.cssClasses = this.cssClasses || this.defaultSlideConfig.cssClasses;
-    this.color = this.color || this.defaultSlideConfig.color;
+    this.className = this.className || this.defaultSlideConfig.className;
+    this.label = this.label || this.defaultSlideConfig.label;
     this.checked = this.checked || this.defaultSlideConfig.checked;
     this.labelPosition = this.labelPosition || this.defaultSlideConfig.labelPosition;
     this.disabled = this.disabled || this.defaultSlideConfig.disabled;
+    this.isLeftPosition = this.labelPosition === 'before';
+    this.isRightPosition = this.labelPosition === 'after';
+    this.hasDescription = this.description != null;
   }
-  onSwitchButtonEvent(event: MatSlideToggleChange) {
-    this.switchBtn.emit(event);
+  onSwitchButtonEvent() {
+    this.checked = !this.checked;
+    this.switchBtn.emit(this.checked);
   }
 
 }

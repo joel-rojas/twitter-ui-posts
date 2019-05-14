@@ -1,8 +1,6 @@
-import { Component, OnInit, AfterViewInit, OnDestroy } from '@angular/core';
-import { MatSlideToggleChange } from '@angular/material/slide-toggle';
+import { Component, OnInit, OnDestroy, AfterContentInit } from '@angular/core';
 import { Store, select } from '@ngrx/store';
 import { Observable, BehaviorSubject, Subscription } from 'rxjs';
-import { ApiService } from './../../services/api/api.service';
 import { PostService } from './../../services/ui/post.service';
 import { AppState } from './../../store';
 import { LoadTwitterPosts, SwitchTwitterPosts, ModifyTwitterPostsQty } from './../../store/twitter/twitter.actions';
@@ -14,12 +12,12 @@ import { selectTwitterPostsByUser } from './../../store/twitter/twitter.selector
   templateUrl: './tw-posts.component.html',
   styleUrls: ['./tw-posts.component.css']
 })
-export class TwPostsComponent implements OnInit, AfterViewInit, OnDestroy {
-  public enableOrderColumn = false;
+export class TwPostsComponent implements OnInit, AfterContentInit, OnDestroy {
+  public enableOrderColumn: boolean;
   public firstColumnQtySubject: BehaviorSubject<number>;
   public firstColumnQtySubscription: Subscription;
   public orderColumnSubscription: Subscription;
-  public orderColumnSwitchSubject: BehaviorSubject<MatSlideToggleChange>;
+  public orderColumnSwitchSubject: BehaviorSubject<boolean>;
   public secondColumnQtySubject: BehaviorSubject<number>;
   public secondColumnQtySubscription: Subscription;
   public thirdColumnQtySubject: BehaviorSubject<number>;
@@ -27,7 +25,6 @@ export class TwPostsComponent implements OnInit, AfterViewInit, OnDestroy {
   public userPosts$: Observable<Array<{id: number, user: string, posts: TwitterPosts[]}>>;
   constructor(
     private store: Store<AppState>,
-    private apiService: ApiService,
     private postService: PostService) {
       this.userPosts$ = this.store.pipe(select(selectTwitterPostsByUser));
       this.orderColumnSwitchSubject = this.postService.orderColumnSwitchSubject;
@@ -39,9 +36,11 @@ export class TwPostsComponent implements OnInit, AfterViewInit, OnDestroy {
   ngOnInit() {
     this.store.dispatch(new LoadTwitterPosts());
   }
-  ngAfterViewInit() {
+  ngAfterContentInit() {
     this.orderColumnSubscription = this.orderColumnSwitchSubject.subscribe(value => {
-      this.enableOrderColumn = value != null && value.checked;
+      if (typeof value === 'boolean') {
+        this.enableOrderColumn = value;
+      }
     });
     this.firstColumnQtySubscription = this.firstColumnQtySubject.subscribe(this.modifyColumnQty(0));
     this.secondColumnQtySubscription = this.secondColumnQtySubject.subscribe(this.modifyColumnQty(1));

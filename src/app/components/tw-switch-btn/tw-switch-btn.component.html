@@ -1,10 +1,18 @@
-<mat-slide-toggle
-    class="tw-slide-toggle"
-    [ngClass]="cssClasses"
-    [color]="color"
-    [checked]="checked"
-    [labelPosition]="labelPosition"
-    [disabled]="disabled"
-    (change)="onSwitchButtonEvent($event)">
-  Order Columns
-</mat-slide-toggle>
+<div class="switch text-center {{className}}" (click)="onSwitchButtonEvent()">
+  <div class="switch-ctn">
+    <span class="switch-label" *ngIf="isLeftPosition">
+        <strong>{{label}}</strong>
+      </span>
+    <div class="switch-btn-ctn">
+      <input class="switch-input" type="checkbox" />
+      <button
+        class="switch-btn"
+        [ngClass]="switchButtonCls"
+        [attr.aria-expanded]="checked"></button>
+    </div>
+    <span class="switch-label" *ngIf="isRightPosition">
+      <strong>{{label}}</strong>
+    </span>
+  </div>
+  <p class="switch-desc text-center" *ngIf="hasDescription">{{description}}</p>
+</div>
