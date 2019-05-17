@@ -7,10 +7,10 @@
       </button>
       <div [ngClass]="menuNavbarCSSClasses" class="navbar-collapse" id="menuNavbar">
         <form class="form-inline">
-          <a (click)="openEditLayoutEvent()" class="nav-link dropdown-toggle form-control" id="editLayoutLink" role="button" aria-haspopup="true" aria-expanded="false">
+          <button type="button" (click)="openEditLayoutEvent()" [disabled]="isEditLayoutBtnDisabled" class="nav-link dropdown-toggle form-control" id="editLayoutLink" role="button" aria-haspopup="true" aria-expanded="false">
             Edit Layout
-          </a>
-          <div class="dropdown-menu" aria-labelledby="editLayoutLink" *ngIf="openEditLayout" >
+          </button>
+          <div class="dropdown-menu" aria-labelledby="editLayoutLink" >
             <div class="dropdown-item order-column-item">
               <app-tw-switch-btn
                 [className]="switchCls"

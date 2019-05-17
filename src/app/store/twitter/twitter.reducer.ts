@@ -5,12 +5,14 @@ import { TwitterActions, TwitterActionTypes } from './twitter.actions';
 export interface TwitterState extends EntityState<TwitterPosts> {
   // additional entities state properties
   users: {id: number; user: string; posts: TwitterPosts[]}[];
+  error: any;
 }
 
 export const emptyTwitterPosts: TwitterState = {
   ids: [],
   entities: null,
-  users: []
+  users: [],
+  error: null
 };
 
 export const adapter: EntityAdapter<TwitterPosts> = createEntityAdapter<TwitterPosts>();
@@ -86,6 +88,10 @@ export function reducer(
       const newUsers = twitterPostsModel.getClonedUsersData(users);
       newUsers[index].posts = userPosts.slice(0, value);
       return {...state, users: newUsers};
+    }
+    case TwitterActionTypes.TwitterPostsLoadingError: {
+      const {error} = action.payload;
+      return {...state, error};
     }
 
     case TwitterActionTypes.ClearTwitters: {

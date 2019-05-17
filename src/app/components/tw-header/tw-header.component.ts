@@ -1,6 +1,7 @@
-import { Component, OnInit, Output, EventEmitter, OnDestroy, AfterContentInit } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, OnDestroy, AfterContentInit, HostListener } from '@angular/core';
 import { BehaviorSubject, Subscription } from 'rxjs';
 import { PostService } from '../../services/ui/post.service';
+import { LoadingService } from 'src/app/services/ui/loading.service';
 
 @Component({
   selector: 'app-tw-header',
@@ -9,27 +10,28 @@ import { PostService } from '../../services/ui/post.service';
 })
 export class TwHeaderComponent implements OnInit, OnDestroy, AfterContentInit {
   public firstColSubject: BehaviorSubject<number>;
-  public firstColSubscription: Subscription;
   public firstTwColumnLbl = 'First Column';
   public firstTwColumnQty: number;
   public isButtonSwitched = false;
+  public isEditLayoutBtnDisabled = false;
+  public loadingSubject$: BehaviorSubject<number>;
   public secondColSubject: BehaviorSubject<number>;
-  public secondColSubscription: Subscription;
   public secondTwColumnLbl = 'Second Column';
   public secondTwColumnQty: number;
+  public subscriptions: Subscription = new Subscription();
   public switchCls = 'menu-switch-btn';
   public switchLabel = 'Order Columns';
   public switchLabelPosition = 'before';
   public switchDescription = `Drag n' drop twitter posts columns while the switch is on.`;
   public thirdColSubject: BehaviorSubject<number>;
-  public thirdColSubscription: Subscription;
   public thirdTwColumnLbl = 'Third Column';
   public thirdTwColumnQty: number;
-  public editLayoutCSSClasses;
-  public menuNavbarCSSClasses;
+  public menuNavbarCSSClasses: any;
   public openEditLayout = false;
   public openNavbar = true;
-  constructor(private postService: PostService) {
+
+  constructor(private postService: PostService, private loadingService: LoadingService) {
+    this.loadingSubject$ = this.loadingService.loadingSubject;
     this.firstColSubject = this.postService.firstColumnQtySubject;
     this.secondColSubject = this.postService.secondColumnQtySubject;
     this.thirdColSubject = this.postService.thirdColumnQtySubject;
@@ -37,14 +39,13 @@ export class TwHeaderComponent implements OnInit, OnDestroy, AfterContentInit {
 
   ngOnInit() {
     this.setComponentUIBehavior();
-    this.firstColSubscription = this.firstColSubject.subscribe(this.changeColValueBySubscription('firstTwColumnQty'));
-    this.secondColSubscription = this.secondColSubject.subscribe(this.changeColValueBySubscription('secondTwColumnQty'));
-    this.thirdColSubscription = this.thirdColSubject.subscribe(this.changeColValueBySubscription('thirdTwColumnQty'));
+    this.subscriptions.add(this.loadingSubject$.subscribe(value => this.isEditLayoutBtnDisabled = value !== 0));
+    this.subscriptions.add(this.firstColSubject.subscribe(this.changeColValueBySubscription('firstTwColumnQty')));
+    this.subscriptions.add(this.secondColSubject.subscribe(this.changeColValueBySubscription('secondTwColumnQty')));
+    this.subscriptions.add(this.thirdColSubject.subscribe(this.changeColValueBySubscription('thirdTwColumnQty')));
   }
   ngOnDestroy() {
-    this.firstColSubscription.unsubscribe();
-    this.secondColSubscription.unsubscribe();
-    this.thirdColSubscription.unsubscribe();
+    this.subscriptions.unsubscribe();
   }
   ngAfterContentInit() {
     this.onSwitchBtnEvent(this.isButtonSwitched);

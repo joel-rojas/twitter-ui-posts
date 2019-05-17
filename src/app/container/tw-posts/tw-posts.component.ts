@@ -15,13 +15,10 @@ import { selectTwitterPostsByUser } from './../../store/twitter/twitter.selector
 export class TwPostsComponent implements OnInit, AfterContentInit, OnDestroy {
   public enableOrderColumn: boolean;
   public firstColumnQtySubject: BehaviorSubject<number>;
-  public firstColumnQtySubscription: Subscription;
-  public orderColumnSubscription: Subscription;
   public orderColumnSwitchSubject: BehaviorSubject<boolean>;
   public secondColumnQtySubject: BehaviorSubject<number>;
-  public secondColumnQtySubscription: Subscription;
+  public subscriptions = new Subscription();
   public thirdColumnQtySubject: BehaviorSubject<number>;
-  public thirdColumnQtySubscription: Subscription;
   public userPosts$: Observable<Array<{id: number, user: string, posts: TwitterPosts[]}>>;
   constructor(
     private store: Store<AppState>,
@@ -37,20 +34,18 @@ export class TwPostsComponent implements OnInit, AfterContentInit, OnDestroy {
     this.store.dispatch(new LoadTwitterPosts());
   }
   ngAfterContentInit() {
-    this.orderColumnSubscription = this.orderColumnSwitchSubject.subscribe(value => {
+    this.subscriptions.add(
+      this.orderColumnSwitchSubject.subscribe(value => {
       if (typeof value === 'boolean') {
         this.enableOrderColumn = value;
       }
-    });
-    this.firstColumnQtySubscription = this.firstColumnQtySubject.subscribe(this.modifyColumnQty(0));
-    this.secondColumnQtySubscription = this.secondColumnQtySubject.subscribe(this.modifyColumnQty(1));
-    this.thirdColumnQtySubscription = this.thirdColumnQtySubject.subscribe(this.modifyColumnQty(2));
+    }));
+    this.subscriptions.add(this.firstColumnQtySubject.subscribe(this.modifyColumnQty(0)));
+    this.subscriptions.add(this.secondColumnQtySubject.subscribe(this.modifyColumnQty(1)));
+    this.subscriptions.add(this.thirdColumnQtySubject.subscribe(this.modifyColumnQty(2)));
   }
   ngOnDestroy() {
-    this.orderColumnSubscription.unsubscribe();
-    this.firstColumnQtySubscription.unsubscribe();
-    this.secondColumnQtySubscription.unsubscribe();
-    this.thirdColumnQtySubscription.unsubscribe();
+    this.subscriptions.unsubscribe();
   }
   onDropTwitterUserPostsEv(event: {previousIndex: number, currentIndex: number}) {
     const {previousIndex, currentIndex} = event;

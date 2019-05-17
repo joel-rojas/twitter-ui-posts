@@ -1,0 +1,10 @@
+.container-fluid {
+  /* position: absolute; */
+  z-index: 20;
+  padding-top: 5vh;
+}
+.container-fluid .loading-ctn {
+  background: rgba(0, 0, 0, 0.5);
+  height: 90vh;
+  width: 100%;
+}

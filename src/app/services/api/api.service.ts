@@ -1,15 +1,15 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { of, Observable, forkJoin, zip } from 'rxjs';
+import { of, Observable, zip, throwError } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { TwitterPosts, TwitterPostsModel } from './../../store/twitter/twitter.model';
+import { environment } from '../../../environments/environment.prod';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ApiService {
-  // readonly baseURL: string = 'http://127.0.0.1:7890/api/';
-  readonly baseURL: string = 'http://18.223.132.65/api/';
+  readonly baseURL = environment.api.baseURL;
   readonly twitterUsers: string[] = [...this.twitterPostModel.twitterUsers];
   constructor(private http: HttpClient, private twitterPostModel: TwitterPostsModel) { }
   fetchTwitterUsersData(): Observable<TwitterPosts[]> {
@@ -23,6 +23,8 @@ export class ApiService {
     return zip(first, second, third).pipe(
       map(([firstUser, secondUser, thirdUser]) => {
         return [...firstUser, ...secondUser, ...thirdUser];
-      }));
+      }),
+      catchError((err) => throwError(err))
+    );
   }
 }

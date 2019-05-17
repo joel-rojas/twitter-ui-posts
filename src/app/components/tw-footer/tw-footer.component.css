@@ -1,5 +1,12 @@
 :host {
   width: 100%;
-  height: 10vh;
   display: inherit;
+}
+
+footer div.col-12 {
+  height: 5vh
+}
+
+footer div.col-12 p {
+  margin: 0;
 }

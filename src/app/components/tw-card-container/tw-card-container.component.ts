@@ -16,12 +16,9 @@ export class TwCardContainerComponent implements OnInit, OnChanges {
 
   ngOnInit() {}
   ngOnChanges(changes: SimpleChanges) {
-    for (const propName in changes) {
-      if (changes[propName]) {
-        if (propName === 'enableOrderColumn') {
-          this.setDragDropListCSSClasses();
-        }
-      }
+    const {enableOrderColumn} = changes;
+    if (enableOrderColumn && enableOrderColumn.currentValue !== enableOrderColumn.previousValue) {
+      this.setDragDropListCSSClasses();
     }
   }
   setDragDropListCSSClasses() {
