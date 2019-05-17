@@ -5,12 +5,14 @@ import { TwitterActions, TwitterActionTypes } from './twitter.actions';
 export interface TwitterState extends EntityState<TwitterPosts> {
   // additional entities state properties
   users: {id: number; user: string; posts: TwitterPosts[]}[];
+  error: any;
 }
 
 export const emptyTwitterPosts: TwitterState = {
   ids: [],
   entities: null,
-  users: []
+  users: [],
+  error: null
 };
 
 export const adapter: EntityAdapter<TwitterPosts> = createEntityAdapter<TwitterPosts>();
@@ -60,6 +62,36 @@ export function reducer(
       const filteredByUser = twitterPostsModel.filterTwitterPostsByUser(twitterPosts);
       const users = Object.keys(filteredByUser).map((key, idx) => ({id: idx, user: key, posts: filteredByUser[key]}));
       return Object.assign({}, adapter.addAll(twitterPosts, state), {users});
+    }
+
+    case TwitterActionTypes.SwitchTwitterPosts: {
+      const {previousIndex, currentIndex} = action.payload;
+      const {users} = state;
+      const newUsers = users.map(user => ({...user}))
+        .map((user, idx, arr) => {
+          if (arr[idx] === arr[previousIndex]) {
+            return arr[currentIndex];
+          } else if (arr[idx] === arr[currentIndex]) {
+            return arr[previousIndex];
+          }
+          return user;
+        });
+      return {...state, users: newUsers};
+    }
+
+    case TwitterActionTypes.ModifyTwitterPostsQty: {
+      const twitterPostsModel = new TwitterPostsModel();
+      const {index, value} = action.payload;
+      const {users, entities} = state;
+      const {user} = users[index];
+      const userPosts = twitterPostsModel.getTwitterPostsByUser(user, entities);
+      const newUsers = twitterPostsModel.getClonedUsersData(users);
+      newUsers[index].posts = userPosts.slice(0, value);
+      return {...state, users: newUsers};
+    }
+    case TwitterActionTypes.TwitterPostsLoadingError: {
+      const {error} = action.payload;
+      return {...state, error};
     }
 
     case TwitterActionTypes.ClearTwitters: {

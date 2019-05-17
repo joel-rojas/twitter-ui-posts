@@ -5,6 +5,9 @@ import { TwitterPosts } from './twitter.model';
 export enum TwitterActionTypes {
   LoadTwitterPosts = '[Twitter] Load Twitters Posts',
   TwitterPostsLoaded = '[Twitter] Twitter Posts Loaded',
+  SwitchTwitterPosts = '[Twitter] Switch Twitter Posts',
+  ModifyTwitterPostsQty = '[Twitter] Modify Twitter Posts Quantity',
+  TwitterPostsLoadingError = '[Twitter] Load Twitter Posts Error',
   AddTwitter = '[Twitter] Add Twitter',
   UpsertTwitter = '[Twitter] Upsert Twitter',
   AddTwitters = '[Twitter] Add Twitters',
@@ -23,6 +26,21 @@ export class LoadTwitterPosts implements Action {
 export class TwitterPostsLoaded implements Action {
   readonly type = TwitterActionTypes.TwitterPostsLoaded;
   constructor(public payload: { twitterPosts: TwitterPosts[] }) {}
+}
+
+export class SwitchTwitterPosts implements Action {
+  readonly type = TwitterActionTypes.SwitchTwitterPosts;
+  constructor(public payload: { previousIndex: number, currentIndex: number }) {}
+}
+
+export class ModifyTwitterPostsQty implements Action {
+  readonly type = TwitterActionTypes.ModifyTwitterPostsQty;
+  constructor(public payload: { index: number, value: number }) {}
+}
+
+export class TwitterPostsLoadingError implements Action {
+  readonly type = TwitterActionTypes.TwitterPostsLoadingError;
+  constructor(public payload: {error: any}) {}
 }
 
 export class AddTwitter implements Action {
@@ -80,6 +98,9 @@ export class ClearTwitters implements Action {
 export type TwitterActions =
 LoadTwitterPosts
  | TwitterPostsLoaded
+ | SwitchTwitterPosts
+ | ModifyTwitterPostsQty
+ | TwitterPostsLoadingError
  | AddTwitter
  | UpsertTwitter
  | AddTwitters

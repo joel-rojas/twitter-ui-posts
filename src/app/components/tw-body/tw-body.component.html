@@ -1,5 +1,12 @@
-<div class="container-fluid">
+<div class="container-fluid" [ngClass]="{'body-ctn': hasLoadedContent}">
   <div class="row">
     <ng-content></ng-content>
+  </div>
+</div>
+<div class="container-fluid failed-content-ctn" *ngIf="hasFailedLoadContent" >
+  <div class="row">
+    <div class="col-12">
+      <h2>Data couldn't be fetched in the app :(</h2>
+    </div>
   </div>
 </div>

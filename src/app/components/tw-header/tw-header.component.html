@@ -7,13 +7,41 @@
       </button>
       <div [ngClass]="menuNavbarCSSClasses" class="navbar-collapse" id="menuNavbar">
         <form class="form-inline">
-          <a (click)="openEditLayoutEvent()" class="nav-link dropdown-toggle form-control" id="editLayoutLink" role="button" aria-haspopup="true" aria-expanded="false">
+          <button type="button" (click)="openEditLayoutEvent()" [disabled]="isEditLayoutBtnDisabled" class="nav-link dropdown-toggle form-control" id="editLayoutLink" role="button" aria-haspopup="true" aria-expanded="false">
             Edit Layout
-          </a>
-          <div class="dropdown-menu" aria-labelledby="editLayoutLink" *ngIf="openEditLayout" >
-            <a class="dropdown-item" href="#">Action</a>
-            <a class="dropdown-item" href="#">Another action</a>
-            <a class="dropdown-item" href="#">Something else here</a>
+          </button>
+          <div class="dropdown-menu" aria-labelledby="editLayoutLink" >
+            <div class="dropdown-item order-column-item">
+              <app-tw-switch-btn
+                [className]="switchCls"
+                [label]="switchLabel"
+                [labelPosition]="switchLabelPosition"
+                [checked]="isButtonSwitched"
+                [description]="switchDescription"
+                (switchBtn)="onSwitchBtnEvent($event)">
+              </app-tw-switch-btn>
+            </div>
+            <div class="dropdown-item">
+              <h6><strong>Increase/Decrease Tweets</strong></h6>
+              <app-tw-incdec-cards
+                [value]="firstTwColumnQty"
+                [label]="firstTwColumnLbl"
+                (decreaseValue)="onDecreaseFirstValueEvent($event)"
+                (increaseValue)="onIncreaseFirstValueEvent($event)">
+              </app-tw-incdec-cards>
+              <app-tw-incdec-cards
+                [value]="secondTwColumnQty"
+                [label]="secondTwColumnLbl"
+                (decreaseValue)="onDecreaseSecondValueEvent($event)"
+                (increaseValue)="onIncreaseSecondValueEvent($event)">
+              </app-tw-incdec-cards>
+              <app-tw-incdec-cards
+                [value]="thirdTwColumnQty"
+                [label]="thirdTwColumnLbl"
+                (decreaseValue)="onDecreaseThirdValueEvent($event)"
+                (increaseValue)="onIncreaseThirdValueEvent($event)">
+              </app-tw-incdec-cards>
+            </div>
           </div>
         </form>
       </div>

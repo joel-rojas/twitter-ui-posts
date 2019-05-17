@@ -1,5 +1,5 @@
-import * as fromTwitter from './twitter/twitter.reducer';
 import { storeFreeze } from 'ngrx-store-freeze';
+import * as fromTwitter from './twitter/twitter.reducer';
 import { environment } from '../../environments/environment.prod';
 import {
   ActionReducer,

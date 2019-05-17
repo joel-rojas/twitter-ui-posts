@@ -3,3 +3,7 @@ html, body {
   height: 100%;
   width: 100%;
 }
+
+.dropdown-item.order-column-item .switch .switch-btn-ctn .switch-btn.switch-btn-on {
+  background: rgba(0, 123, 255, 1);
+}

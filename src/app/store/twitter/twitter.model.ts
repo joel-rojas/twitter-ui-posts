@@ -1,4 +1,6 @@
+import { TwitterPosts } from './twitter.model';
 import { Injectable } from '@angular/core';
+import { Dictionary } from '@ngrx/entity';
 
 export enum TwitterUsers {
   MakeSchool = 'MakeSchool',
@@ -33,5 +35,13 @@ export class TwitterPostsModel {
       }
     });
     return twitterUsers as {MakeSchool: TwitterPosts[], newsycombinator: TwitterPosts[], ycombinator: TwitterPosts[]};
+  }
+  getClonedUsersData(users: Array<{id: number, user: string, posts: TwitterPosts[]}>) {
+    return users.map(user => ({...user}));
+  }
+  getTwitterPostsByUser(user: string, entities: Dictionary<TwitterPosts>) {
+    const twitterPostKeys = Object.keys(entities);
+    const userTwitterPostsIdxs = twitterPostKeys.filter((postIdx) => (entities[postIdx] as TwitterPosts).user.screen_name === user);
+    return userTwitterPostsIdxs.map(postIdx => entities[postIdx]);
   }
 }
