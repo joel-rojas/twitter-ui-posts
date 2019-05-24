@@ -1,4 +1,4 @@
-<div class="col-12">
+<div class="col-12" [ngClass]="{'tw-card-ctn': hasLoadedContent}">
     <div class="row tw-posts-drag-drop--ctn-list"
       cdkDropList
       [cdkDropListDisabled]="!enableOrderColumn"

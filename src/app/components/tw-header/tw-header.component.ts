@@ -20,13 +20,13 @@ export class TwHeaderComponent implements OnInit, OnDestroy, AfterContentInit {
   public secondTwColumnQty: number;
   public subscriptions: Subscription = new Subscription();
   public switchCls = 'menu-switch-btn';
-  public switchLabel = 'Order Columns';
+  public switchLabel = 'Sort Columns';
   public switchLabelPosition = 'before';
   public switchDescription = `Drag n' drop twitter posts columns while the switch is on.`;
   public thirdColSubject: BehaviorSubject<number>;
   public thirdTwColumnLbl = 'Third Column';
   public thirdTwColumnQty: number;
-  public menuNavbarCSSClasses: any;
+  public menuNavbarCSSClasses: object;
   public openEditLayout = false;
   public openNavbar = true;
 
@@ -52,7 +52,7 @@ export class TwHeaderComponent implements OnInit, OnDestroy, AfterContentInit {
   }
   setComponentUIBehavior() {
     this.menuNavbarCSSClasses = {
-      'collapse': this.openNavbar
+      collapse: this.openNavbar
     };
     this.openEditLayout = !this.openNavbar && this.openEditLayout;
   }

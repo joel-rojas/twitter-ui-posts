@@ -50,9 +50,6 @@
 .switch .switch-btn-ctn .switch-btn.switch-btn-on::after {
   left: 50%;
 }
-.switch .switch-btn-ctn .switch-btn.switch-btn-on {
-  background: rgba(0, 123, 255, 1);
-}
 .switch .switch-btn-ctn .switch-btn.switch-btn-on:active {
   box-shadow: none;
 }

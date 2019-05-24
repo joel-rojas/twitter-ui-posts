@@ -4,7 +4,7 @@
 }
 
 .container-fluid.body-ctn, .container-fluid.failed-content-ctn {
-  padding-top: 5vh;
+  padding-top: 10vh;
 }
 
 .container-fluid.failed-content-ctn .col-12 {
@@ -12,4 +12,10 @@
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+@media (min-width: 992) {
+  .container-fluid.body-ctn, .container-fluid.failed-content-ctn {
+    padding-top: 5vh;
+  }
 }

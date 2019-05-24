@@ -12,14 +12,12 @@ export class HttpConfigInterceptor implements HttpInterceptor {
     return next.handle(request).pipe(
       tap((event: HttpEvent<any>) => {
         if (event instanceof HttpResponse && event.status === 200) {
-          this.loadingService.setLoadingValue(--this.apiCallsQty);
-          if (this.apiCallsQty === 0) {
-            this.loadingService.setLoadingValue(this.apiCallsQty);
-          }
-          return event;
+          this.apiCallsQty -= 1;
         } else {
-          this.loadingService.setLoadingValue(++this.apiCallsQty);
+          this.apiCallsQty += 1;
         }
+        this.loadingService.setLoadingValue(this.apiCallsQty);
+        return event;
       }),
       catchError((err: HttpErrorResponse) => {
         this.loadingService.setLoadingValue(-1);

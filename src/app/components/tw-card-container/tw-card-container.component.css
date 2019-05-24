@@ -2,16 +2,24 @@
   display: inherit;
 }
 
-.tw-posts-drag-drop--ctn-list--item {
+.tw-card-ctn {
+  padding: 15px;
+}
+
+.tw-card-ctn > div.row {
   margin: 0;
 }
 
-.tw-posts-drag-drop--ctn-list--item-enabled {
+.tw-card-ctn .tw-posts-drag-drop--ctn-list--item {
+  margin: 0;
+}
+
+.tw-card-ctn .tw-posts-drag-drop--ctn-list--item-enabled {
   border-radius: 5px;
   border: 1px dashed;
 }
 
-.tw-posts-drag-drop--ctn-list--item-disabled {
+.tw-card-ctn .tw-posts-drag-drop--ctn-list--item-disabled {
   border: none;
   border-radius: 0;
 }

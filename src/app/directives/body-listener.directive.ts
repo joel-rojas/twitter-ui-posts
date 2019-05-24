@@ -4,8 +4,10 @@ import { Directive, HostListener, Inject, AfterContentInit } from '@angular/core
   selector: '[appBodyListener]'
 })
 export class BodyListenerDirective implements AfterContentInit {
+  public activeCls = 'active';
   public document: Document;
   public editLayoutBtnEl: HTMLElement;
+  public editLayoutBtnCls = 'nav-link dropdown-toggle form-control';
   public editLayoutBtnSelector = 'header .dropdown-toggle';
   public editMenuCls =  'dropdown-menu';
   public editMenuEl: HTMLElement;
@@ -28,11 +30,14 @@ export class BodyListenerDirective implements AfterContentInit {
     if (el.id === this.editLayoutBtnEl.id) {
       if (hasShowCls) {
         this.editMenuEl.className = this.editMenuCls;
+        this.editLayoutBtnEl.className = this.editLayoutBtnCls;
       } else {
+        this.editLayoutBtnEl.className = `${this.editLayoutBtnCls} ${this.activeCls}`;
         this.editMenuEl.className = `${this.editMenuCls} ${this.showCls}`;
       }
     } else if (hasShowCls && el.id !== this.editLayoutBtnEl.id && el.closest(this.editMenuSelector) === null) {
         this.editMenuEl.className = this.editMenuCls;
+        this.editLayoutBtnEl.className = this.editLayoutBtnCls;
     }
   }
 

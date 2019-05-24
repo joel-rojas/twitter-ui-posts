@@ -4,6 +4,239 @@ html, body {
   width: 100%;
 }
 
-.dropdown-item.order-column-item .switch .switch-btn-ctn .switch-btn.switch-btn-on {
-  background: rgba(0, 123, 255, 1);
+/* App colors variables */
+:root {
+  --app-black: #37474F;
+  --app-white: #ffffff;
+  --app-theme1-blue: #2196f3;
+  --app-theme1-light-blue: #6ec6ff;
+  --app-theme1-dark-blue: #0069c0;
+  --app-theme2-purple: #673ab7;
+  --app-theme2-light-purple: #9a67ea;
+  --app-theme2-dark-purple: #320b86;
+  --app-theme3-light-black: #78909c;
+  --app-theme3-dark-black: #263238;
+}
+
+/* App headings, paragraph and label colors */
+.main-container.theme1 h1, .main-container.theme1 h2,
+.main-container.theme1 h3, .main-container.theme1 h4,
+.main-container.theme1 h5, .main-container.theme1 h6,
+.main-container.theme1 p, .main-container.theme1 label,
+.main-container.theme2 p, .main-container.theme3 p,
+.main-container.theme2 label, .main-container.theme3 label {
+  color: #37474F;
+  color: var(--app-black);
+}
+.main-container.theme2 h1, .main-container.theme3 h1,
+.main-container.theme2 h2, .main-container.theme3 h2,
+.main-container.theme2 h3, .main-container.theme3 h3,
+.main-container.theme2 h4, .main-container.theme3 h4,
+.main-container.theme2 h5, .main-container.theme3 h5,
+.main-container.theme2 h6, .main-container.theme3 h6 {
+  color: #ffffff;
+  color: var(--app-white);
+}
+
+/* App header + footer background color */
+.main-container.theme1 header > nav,
+.main-container.theme1 footer {
+  background: #2196f3;
+  background: var(--app-theme1-blue);
+}
+.main-container.theme2 header > nav,
+.main-container.theme2 footer {
+  background: #673ab7;
+  background: var(--app-theme2-purple);
+}
+.main-container.theme3 header > nav,
+.main-container.theme3 footer {
+  background: #37474F;
+  background: var(--app-black);
+}
+
+/* App footer paragraph color */
+.main-container.theme1 footer div.col-12 p,
+.main-container.theme2 footer div.col-12 p,
+.main-container.theme3 footer div.col-12 p {
+  color: #ffffff;
+  color: var(--app-white);
+}
+
+/* App header brand color */
+.main-container.theme1 header > nav > div > a.navbar-brand,
+.main-container.theme2 header > nav > div > a.navbar-brand,
+.main-container.theme3 header > nav > div > a.navbar-brand {
+  color: #ffffff;
+  color: var(--app-white);
+  font-weight: bold;
+}
+
+/* App mobile menu button */
+.main-container.theme1 header .navbar-expand-lg .navbar-toggler,
+.main-container.theme2 header .navbar-expand-lg .navbar-toggler,
+.main-container.theme3 header .navbar-expand-lg .navbar-toggler {
+  color: #ffffff;
+  color: var(--app-white);
+  border: 1px solid #ffffff;
+  border: 1px solid var(--app-white);
+}
+
+/* App edit layout button */
+.main-container.theme1 header .navbar-expand-lg .navbar-collapse > form .dropdown-toggle:disabled,
+.main-container.theme1 header .navbar-expand-lg .navbar-collapse > form .dropdown-toggle[readonly],
+.main-container.theme2 header .navbar-expand-lg .navbar-collapse > form .dropdown-toggle:disabled,
+.main-container.theme2 header .navbar-expand-lg .navbar-collapse > form .dropdown-toggle[readonly],
+.main-container.theme3 header .navbar-expand-lg .navbar-collapse > form .dropdown-toggle:disabled,
+.main-container.theme3 header .navbar-expand-lg .navbar-collapse > form .dropdown-toggle[readonly] {
+  border: none;
+  color: rgba(255, 255, 255, 0.75);
+}
+.main-container.theme1 header .navbar-expand-lg .navbar-collapse > form .dropdown-toggle:focus {
+  border-color: #6ec6ff;
+  border-color: var(--app-theme1-light-blue);
+  box-shadow: 0 0 0 0.2rem rgba(110, 198, 255,.25);
+}
+.main-container.theme2 header .navbar-expand-lg .navbar-collapse > form .dropdown-toggle:focus {
+  border-color: #9a67ea;
+  border-color: var(--app-theme2-light-purple);
+  box-shadow: 0 0 0 0.2rem rgba(154, 103, 234,.25);
+}
+.main-container.theme3 header .navbar-expand-lg .navbar-collapse > form .dropdown-toggle:focus {
+  border-color: #78909c;
+  border-color: var(--app-theme3-light-black);
+  box-shadow: 0 0 0 0.2rem rgba(120, 144, 156,.25);
+}
+
+/* App edit-layout menu items configuration */
+.main-container.theme1 header .navbar-expand-lg .navbar-collapse > form .dropdown-menu .dropdown-item,
+.main-container.theme2 header .navbar-expand-lg .navbar-collapse > form .dropdown-menu .dropdown-item,
+.main-container.theme3 header .navbar-expand-lg .navbar-collapse > form .dropdown-menu .dropdown-item {
+  color: #37474F;
+  color: var(--app-black);
+}
+.main-container.theme1 header .navbar-expand-lg .navbar-collapse > form .dropdown-menu .dropdown-item:hover {
+  background: jjjjjjjjj  k  rgba(110, 198, 255, 0.251);
+}
+.main-container.theme2 header .navbar-expand-lg .navbar-collapse > form .dropdown-menu .dropdown-item:hover {
+  background: rgba(154, 103, 234, 0.251);
+}
+.main-container.theme3 header .navbar-expand-lg .navbar-collapse > form .dropdown-menu .dropdown-item:hover {
+  background: rgba(120, 144, 156, 0.251);
+}
+
+/* Sort-column switch-on background color config placed on Edit-Layout menu*/
+.main-container.theme1 header .navbar-expand-lg .navbar-collapse > form .dropdown-menu .dropdown-item.order-column-item .switch .switch-btn-ctn .switch-btn.switch-btn-on {
+  background: #2196f3;
+  background: var(--app-theme1-blue);
+}
+.main-container.theme2 header .navbar-expand-lg .navbar-collapse > form .dropdown-menu .dropdown-item.order-column-item .switch .switch-btn-ctn .switch-btn.switch-btn-on {
+  background: #673ab7;
+  background: var(--app-theme2-purple);
+}
+.main-container.theme3 header .navbar-expand-lg .navbar-collapse > form .dropdown-menu .dropdown-item.order-column-item .switch .switch-btn-ctn .switch-btn.switch-btn-on {
+  background: #37474F;
+  background: var(--app-black);
+}
+
+/* Inc/Dec button layout config placed on Edit-Layout menu */
+.main-container.theme2 header .navbar-expand-lg .navbar-collapse > form .dropdown-menu .dropdown-item h6,
+.main-container.theme3 header .navbar-expand-lg .navbar-collapse > form .dropdown-menu .dropdown-item h6 {
+  color: #37474f;
+  color: var(--app-black);
+}
+.main-container.theme1 header .navbar-expand-lg .navbar-collapse > form .dropdown-menu .dropdown-item .incdec-ctn button {
+  color: #ffffff;
+  color: var(--app-white);
+  background: #2196f3;
+  background: var(--app-theme1-blue);
+}
+.main-container.theme2 header .navbar-expand-lg .navbar-collapse > form .dropdown-menu .dropdown-item .incdec-ctn button {
+  color: #ffffff;
+  color: var(--app-white);
+  background: #673ab7;
+  background: var(--app-theme2-purple);
+}
+.main-container.theme3 header .navbar-expand-lg .navbar-collapse > form .dropdown-menu .dropdown-item .incdec-ctn button {
+  color: #ffffff;
+  color: var(--app-white);
+  background: #37473F;
+  background: var(--app-black);
+}
+.main-container.theme1 header .navbar-expand-lg .navbar-collapse > form .dropdown-menu .dropdown-item .incdec-ctn button:hover,
+.main-container.theme1 header .navbar-expand-lg .navbar-collapse > form .dropdown-menu .dropdown-item .incdec-ctn button:active {
+  background: #0069c0;
+  background: var(--app-theme1-dark-blue);
+}
+.main-container.theme2 header .navbar-expand-lg .navbar-collapse > form .dropdown-menu .dropdown-item .incdec-ctn button:hover,
+.main-container.theme2 header .navbar-expand-lg .navbar-collapse > form .dropdown-menu .dropdown-item .incdec-ctn button:active {
+  background: #320b86;
+  background: var(--app-theme2-dark-purple);
+}
+.main-container.theme3 header .navbar-expand-lg .navbar-collapse > form .dropdown-menu .dropdown-item .incdec-ctn button:hover,
+.main-container.theme3 header .navbar-expand-lg .navbar-collapse > form .dropdown-menu .dropdown-item .incdec-ctn button:active {
+  background: #263238;
+  background: var(--app-theme3-dark-black);
+}
+.main-container.theme1 header .navbar-expand-lg .navbar-collapse > form .dropdown-menu .dropdown-item .incdec-ctn button.form-control:disabled,
+.main-container.theme1 header .navbar-expand-lg .navbar-collapse > form .dropdown-menu .dropdown-item .incdec-ctn button.form-control[readonly] {
+  background: #2196f3;
+  background: var(--app-theme1-blue);
+}
+.main-container.theme2 header .navbar-expand-lg .navbar-collapse > form .dropdown-menu .dropdown-item .incdec-ctn button.form-control:disabled,
+.main-container.theme2 header .navbar-expand-lg .navbar-collapse > form .dropdown-menu .dropdown-item .incdec-ctn button.form-control[readonly] {
+  background: #673ab7;
+  background: var(--app-theme2-purple);
+}
+.main-container.theme3 header .navbar-expand-lg .navbar-collapse > form .dropdown-menu .dropdown-item .incdec-ctn button.form-control:disabled,
+.main-container.theme3 header .navbar-expand-lg .navbar-collapse > form .dropdown-menu .dropdown-item .incdec-ctn button.form-control[readonly] {
+  background: #37474f;
+  background: var(--app-black);
+}
+
+/* App body background color config*/
+.main-container.theme1 .body-ctn .tw-card-ctn {
+  background: #ffffff;
+  background: var(--app-white);
+}
+.main-container.theme2 .body-ctn .tw-card-ctn {
+  background: #9a67ea;
+  background: var(--app-theme2-light-purple);
+}
+.main-container.theme3 .body-ctn .tw-card-ctn {
+  background: #78909c;
+  background: var(--app-theme3-light-black);
+}
+
+/* App Twitter posts columns config*/
+.main-container.theme2 .body-ctn .tw-card-ctn .tw-posts-drag-drop--ctn-list--item.tw-posts-drag-drop--ctn-list--item-enabled,
+.main-container.theme3 .body-ctn .tw-card-ctn .tw-posts-drag-drop--ctn-list--item.tw-posts-drag-drop--ctn-list--item-enabled {
+  border: 1px dashed #ffffff;
+  border: 1px dashed var(--app-white);
+}
+.main-container.theme2 .body-ctn .tw-card-ctn .tw-posts-drag-drop--ctn-list--item .card .card-body .card-title h5,
+.main-container.theme3 .body-ctn .tw-card-ctn .tw-posts-drag-drop--ctn-list--item .card .card-body .card-title h5 {
+  color: #37474F;
+  color: var(--app-black);
+}
+
+/* Layout config for larger screens */
+@media (min-width: 992px) {
+  /* Edit layout button */
+  .main-container.theme1 header .navbar-expand-lg .navbar-collapse > form .dropdown-toggle,
+  .main-container.theme2 header .navbar-expand-lg .navbar-collapse > form .dropdown-toggle,
+  .main-container.theme3 header .navbar-expand-lg .navbar-collapse > form .dropdown-toggle {
+    color: #ffffff;
+    color: var(--app-white);
+    font-weight: bold !important;
+  }
+  .main-container.theme1 header .navbar-expand-lg .navbar-collapse > form .dropdown-toggle:hover,
+  .main-container.theme1 header .navbar-expand-lg .navbar-collapse > form .dropdown-toggle.active,
+  .main-container.theme2 header .navbar-expand-lg .navbar-collapse > form .dropdown-toggle:hover,
+  .main-container.theme2 header .navbar-expand-lg .navbar-collapse > form .dropdown-toggle.active,
+  .main-container.theme3 header .navbar-expand-lg .navbar-collapse > form .dropdown-toggle:hover,
+  .main-container.theme3 header .navbar-expand-lg .navbar-collapse > form .dropdown-toggle.active {
+    border-bottom: 5px solid #ffffff !important;
+    border-bottom: 5px solid var(--app-white) !important;
+  }
 }

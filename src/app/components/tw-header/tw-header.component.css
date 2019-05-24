@@ -1,16 +1,28 @@
 :host {
   position: fixed;
   width: 100%;
-  height: 5vh;
   z-index: 10;
 }
 
-.navbar-expand-lg .navbar-toggler {
-  margin: 10px 0;
+.navbar-expand-lg {
+  height: 10vh;
+}
+
+.navbar-expand-lg > div {
+  padding: 0;
 }
 
 .navbar-expand-lg .navbar-collapse {
-  position: relative;
+  margin: 0 -15px;
+  top: 10vh;
+  width: 100%;
+  position: absolute;
+  background: #ffffff;
+  background: var(--app-white)
+}
+
+.navbar-expand-lg .navbar-toggler {
+  outline: 1px auto;
 }
 
 .navbar-expand-lg .navbar-collapse > form .dropdown-menu {
@@ -18,9 +30,13 @@
   display: none;
   width: 100%;
   position: relative;
-  border: none;
+  border-top: none;
+  border-left: none;
+  border-right: none;
+  border-radius: 0;
   text-align: center;
-  background: transparent;
+  background: #ffffff;
+  background: var(--app-white);
 }
 
 .navbar-expand-lg .navbar-collapse > form .dropdown-menu.collapse{
@@ -28,7 +44,9 @@
 }
 
 .navbar-expand-lg .navbar-collapse > form .dropdown-menu.show{
-  display: block;
+  display: flex;
+  flex-direction: column;
+  justify-items: center;
 }
 
 .navbar-expand-lg .navbar-collapse > form .dropdown-menu .dropdown-item.order-column-item {
@@ -36,7 +54,10 @@
 }
 
 .navbar-expand-lg .navbar-collapse > form .dropdown-toggle {
-  border: none;
+  border-top: none;
+  border-left: none;
+  border-right: none;
+  border-radius: 0;
   background: transparent;
   text-align: center;
   width: 100%;
@@ -45,29 +66,37 @@
 .navbar-expand-lg .navbar-collapse > form .dropdown-menu .dropdown-item.active,
 .navbar-expand-lg .navbar-collapse > form .dropdown-menu .dropdown-item:active {
   background: transparent;
-  color: #212529;
 }
 
 @media (min-width: 992px) {
+  .navbar-expand-lg {
+    height: 5vh;
+  }
+  .navbar-expand-lg .navbar-collapse {
+    position: relative;
+    top: 0;
+    margin: 0;
+    background: transparent;
+  }
   .navbar-expand-lg .navbar-collapse > form {
     justify-content: flex-end;
     width: 100%;
   }
   .navbar-expand-lg .navbar-collapse > form .dropdown-toggle {
-    border: 1px solid #ced4da;
-    background: #ffffff;
     text-align: left;
     width: auto;
+    font-weight: normal;
+    border: none;
   }
   .navbar-expand-lg .navbar-collapse > form .dropdown-menu {
     position: absolute;
     width: auto;
-    border: 1px solid #ced4da;
-    background: #ffffff;
     text-align: left;
+    border: 1px solid rgba(0,0,0,.125);
   }
   .navbar-expand-lg .navbar-collapse > form .dropdown-menu .dropdown-item.order-column-item {
     display: block;
+    cursor: pointer;
   }
   .navbar-expand-lg .navbar-collapse > form .dropdown-menu .dropdown-item.order-column-item app-tw-switch-btn {
     display: inherit;

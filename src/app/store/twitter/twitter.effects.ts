@@ -16,7 +16,7 @@ export class TwitterEffects {
       switchMap((action: LoadTwitterPosts) =>
         this.apiService.fetchTwitterUsersData().pipe(
           map((twitterPosts: TwitterPosts[]) => new TwitterPostsLoaded({twitterPosts})),
-          catchError((error) => of(new TwitterPostsLoadingError({error})))
+          catchError((error) => of(new TwitterPostsLoadingError()))
         )
       )
     );

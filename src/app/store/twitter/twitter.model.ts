@@ -1,4 +1,3 @@
-import { TwitterPosts } from './twitter.model';
 import { Injectable } from '@angular/core';
 import { Dictionary } from '@ngrx/entity';
 
@@ -8,18 +7,38 @@ export enum TwitterUsers {
   YCombinator = 'ycombinator'
 }
 
+export interface User {
+  id: string;
+  name: string;
+  screen_name: string;
+  profile_image_url: string;
+}
+
+export interface BasicUser {
+  id: string;
+  name: string;
+  screen_name: string;
+}
+
 export interface TwitterPosts {
   id: string;
   id_str: string;
   created_at: string;
   text: string;
-  user: {
-    name: string;
-    screen_name: string;
+  entities: {
+    user_mentions: BasicUser[]
   };
+  user: User;
   retweeted_status: {
     id: string;
+    user: User;
   };
+}
+
+export interface TwitterUser {
+  id: number;
+  user: string;
+  posts: TwitterPosts[];
 }
 
 @Injectable({providedIn: 'root'})
