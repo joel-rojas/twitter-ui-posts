@@ -4,6 +4,7 @@
 
 .tw-card-ctn {
   padding: 15px;
+  min-height: 90vh;
 }
 
 .tw-card-ctn > div.row {

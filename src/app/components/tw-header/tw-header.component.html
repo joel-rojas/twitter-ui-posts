@@ -21,7 +21,7 @@
                 (switchBtn)="onSwitchBtnEvent($event)">
               </app-tw-switch-btn>
             </div>
-            <div class="dropdown-item">
+            <div class="dropdown-item inc-dec-twposts-item">
               <h6><strong>Increase/Decrease Tweets</strong></h6>
               <app-tw-incdec-cards
                 [value]="firstTwColumnQty"
@@ -41,6 +41,29 @@
                 (decreaseValue)="onDecreaseThirdValueEvent($event)"
                 (increaseValue)="onIncreaseThirdValueEvent($event)">
               </app-tw-incdec-cards>
+            </div>
+            <div class="dropdown-item change-theme-item">
+              <h6><strong>Change Theme</strong></h6>
+              <div class="row">
+                <app-tw-theme-btn
+                  [select]="selectedTheme"
+                  [defaultCls]="firstThemeCls"
+                  [isActive]="isFirstThemeActive"
+                  (selectTwTheme)="onSelectFirstTheme()">
+                </app-tw-theme-btn>
+                <app-tw-theme-btn
+                  [select]="selectedTheme"
+                  [defaultCls]="secondThemeCls"
+                  [isActive]="isSecondThemeActive"
+                  (selectTwTheme)="onSelectSecondTheme()">
+                </app-tw-theme-btn>
+                <app-tw-theme-btn
+                  [select]="selectedTheme"
+                  [defaultCls]="thirdThemeCls"
+                  [isActive]="isThirdThemeActive"
+                  (selectTwTheme)="onSelectThirdTheme()">
+                </app-tw-theme-btn>
+              </div>
             </div>
           </div>
         </form>

@@ -1,37 +1,36 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
+import { LayoutDataService } from './../local-data/layout-data.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class PostService {
-  public firstColumnQtySubject: BehaviorSubject<number> = new BehaviorSubject(null);
-  public orderColumnSwitchSubject: BehaviorSubject<boolean> = new BehaviorSubject(null);
-  public secondColumnQtySubject: BehaviorSubject<number> = new BehaviorSubject(null);
-  public thirdColumnQtySubject: BehaviorSubject<number> = new BehaviorSubject(null);
-  constructor() { }
+  public firstColumnQtySubject$: BehaviorSubject<number> = new BehaviorSubject(null);
+  public sortColumnSwitchSubject$: BehaviorSubject<boolean> = new BehaviorSubject(false);
+  public secondColumnQtySubject$: BehaviorSubject<number> = new BehaviorSubject(null);
+  public thirdColumnQtySubject$: BehaviorSubject<number> = new BehaviorSubject(null);
+  public selectThemeSubject$: BehaviorSubject<string> = new BehaviorSubject(this.layoutDataService.appThemes.FIRST);
+  constructor(private layoutDataService: LayoutDataService) { }
   changeTwitterColumnsData(data: {previousIndex: number, currentIndex: number}) {
     const {currentIndex, previousIndex} = data;
     switch (currentIndex) {
       case 0: {
         this.switchColumnData(currentIndex, previousIndex,
-          this.firstColumnQtySubject, this.secondColumnQtySubject, this.thirdColumnQtySubject);
+          this.firstColumnQtySubject$, this.secondColumnQtySubject$, this.thirdColumnQtySubject$);
         break;
       }
       case 1: {
         this.switchColumnData(currentIndex, previousIndex,
-          this.secondColumnQtySubject, this.firstColumnQtySubject, this.thirdColumnQtySubject);
+          this.secondColumnQtySubject$, this.firstColumnQtySubject$, this.thirdColumnQtySubject$);
         break;
       }
       case 2: {
         this.switchColumnData(currentIndex, previousIndex,
-          this.thirdColumnQtySubject, this.firstColumnQtySubject, this.secondColumnQtySubject);
+          this.thirdColumnQtySubject$, this.firstColumnQtySubject$, this.secondColumnQtySubject$);
         break;
       }
     }
-  }
-  clearOrderColumnSwitch() {
-    this.clearSubject(this.orderColumnSwitchSubject);
   }
   decreasePostsQtyValue(value: number) {
     return --value;
@@ -40,16 +39,19 @@ export class PostService {
     return ++value;
   }
   saveFirstColumnQtyValue(value: number) {
-    this.saveSubject(this.firstColumnQtySubject, value);
+    this.saveSubject(this.firstColumnQtySubject$, value);
+  }
+  saveSortColumnSwitchValue(value: boolean) {
+    this.saveSubject(this.sortColumnSwitchSubject$, value);
   }
   saveSecondColumnQtyValue(value: number) {
-    this.saveSubject(this.secondColumnQtySubject, value);
+    this.saveSubject(this.secondColumnQtySubject$, value);
   }
   saveThirdColumnQtyValue(value: number) {
-    this.saveSubject(this.thirdColumnQtySubject, value);
+    this.saveSubject(this.thirdColumnQtySubject$, value);
   }
-  saveOrderColumnSwitchValue(value: boolean) {
-    this.saveSubject(this.orderColumnSwitchSubject, value);
+  saveThemeSelectedValue(value: string) {
+    this.saveSubject(this.selectThemeSubject$, value);
   }
   private clearSubject(subject: BehaviorSubject<any>) {
     subject.next(null);

@@ -26,6 +26,7 @@ import { TwSwitchBtnComponent } from './components/tw-switch-btn/tw-switch-btn.c
 import { TwIncdecCardsComponent } from './components/tw-incdec-cards/tw-incdec-cards.component';
 import { BodyListenerDirective } from './directives/body-listener.directive';
 import { LoadingMaskComponent } from './components/loading-mask/loading-mask.component';
+import { TwThemeBtnComponent } from './components/tw-theme-btn/tw-theme-btn.component';
 
 @NgModule({
   declarations: [
@@ -38,6 +39,7 @@ import { LoadingMaskComponent } from './components/loading-mask/loading-mask.com
     TwCardContainerComponent,
     TwSwitchBtnComponent,
     TwIncdecCardsComponent,
+    TwThemeBtnComponent,
     BodyListenerDirective,
     LoadingMaskComponent
   ],

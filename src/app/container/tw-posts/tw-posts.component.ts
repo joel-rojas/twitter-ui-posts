@@ -14,20 +14,20 @@ import { selectTwitterPostsByUser } from './../../store/twitter/twitter.selector
 })
 export class TwPostsComponent implements OnInit, AfterContentInit, OnDestroy {
   public enableOrderColumn: boolean;
-  public firstColumnQtySubject: BehaviorSubject<number>;
-  public orderColumnSwitchSubject: BehaviorSubject<boolean>;
-  public secondColumnQtySubject: BehaviorSubject<number>;
+  public firstColumnQtySubject$: BehaviorSubject<number>;
+  public secondColumnQtySubject$: BehaviorSubject<number>;
+  public sortColumnSwitchSubject$: BehaviorSubject<boolean>;
   public subscriptions = new Subscription();
-  public thirdColumnQtySubject: BehaviorSubject<number>;
+  public thirdColumnQtySubject$: BehaviorSubject<number>;
   public userPosts$: Observable<Array<{id: number, user: string, posts: TwitterPosts[]}>>;
   constructor(
     private store: Store<AppState>,
     private postService: PostService) {
       this.userPosts$ = this.store.pipe(select(selectTwitterPostsByUser));
-      this.orderColumnSwitchSubject = this.postService.orderColumnSwitchSubject;
-      this.firstColumnQtySubject = this.postService.firstColumnQtySubject;
-      this.secondColumnQtySubject = this.postService.secondColumnQtySubject;
-      this.thirdColumnQtySubject = this.postService.thirdColumnQtySubject;
+      this.sortColumnSwitchSubject$ = this.postService.sortColumnSwitchSubject$;
+      this.firstColumnQtySubject$ = this.postService.firstColumnQtySubject$;
+      this.secondColumnQtySubject$ = this.postService.secondColumnQtySubject$;
+      this.thirdColumnQtySubject$ = this.postService.thirdColumnQtySubject$;
     }
 
   ngOnInit() {
@@ -35,14 +35,14 @@ export class TwPostsComponent implements OnInit, AfterContentInit, OnDestroy {
   }
   ngAfterContentInit() {
     this.subscriptions.add(
-      this.orderColumnSwitchSubject.subscribe(value => {
+      this.sortColumnSwitchSubject$.subscribe(value => {
       if (typeof value === 'boolean') {
         this.enableOrderColumn = value;
       }
     }));
-    this.subscriptions.add(this.firstColumnQtySubject.subscribe(this.modifyColumnQty(0)));
-    this.subscriptions.add(this.secondColumnQtySubject.subscribe(this.modifyColumnQty(1)));
-    this.subscriptions.add(this.thirdColumnQtySubject.subscribe(this.modifyColumnQty(2)));
+    this.subscriptions.add(this.firstColumnQtySubject$.subscribe(this.modifyColumnQty(0)));
+    this.subscriptions.add(this.secondColumnQtySubject$.subscribe(this.modifyColumnQty(1)));
+    this.subscriptions.add(this.thirdColumnQtySubject$.subscribe(this.modifyColumnQty(2)));
   }
   ngOnDestroy() {
     this.subscriptions.unsubscribe();

@@ -6,7 +6,7 @@ html, body {
 
 /* App colors variables */
 :root {
-  --app-black: #37474F;
+  --app-black: #37474f;
   --app-white: #ffffff;
   --app-theme1-blue: #2196f3;
   --app-theme1-light-blue: #6ec6ff;
@@ -116,7 +116,7 @@ html, body {
   color: var(--app-black);
 }
 .main-container.theme1 header .navbar-expand-lg .navbar-collapse > form .dropdown-menu .dropdown-item:hover {
-  background: jjjjjjjjj  k  rgba(110, 198, 255, 0.251);
+  background: rgba(110, 198, 255, 0.251);
 }
 .main-container.theme2 header .navbar-expand-lg .navbar-collapse > form .dropdown-menu .dropdown-item:hover {
   background: rgba(154, 103, 234, 0.251);

@@ -53,6 +53,10 @@
   display: none;
 }
 
+.navbar-expand-lg .navbar-collapse > form .dropdown-menu .dropdown-item.change-theme-item .row{
+  justify-content: space-evenly;
+}
+
 .navbar-expand-lg .navbar-collapse > form .dropdown-toggle {
   border-top: none;
   border-left: none;
