@@ -1,6 +1,5 @@
-import { User } from './../../store/twitter/twitter.model';
 import { Component, OnInit, Input } from '@angular/core';
-import { TwitterPosts } from '../../store/twitter/twitter.model';
+import { TwitterPosts, User } from '../../store/twitter/twitter.model';
 
 @Component({
   selector: 'app-tw-card',
