@@ -4,7 +4,7 @@
       <picture>
         <img [src]="twitterUserImgURL"/>
       </picture>
-      <h5>{{tweet.user.name}}</h5>
+      <h5>{{index + 1}}. {{tweet.user.name}}</h5>
     </div>
     <div class="card-subtitle mb-2 text-muted">
       <a class="card-link" [href]="twitterUserURL" target="_blank">@{{tweet.user.screen_name}}</a>

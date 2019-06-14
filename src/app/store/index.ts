@@ -17,4 +17,5 @@ export const reducers: ActionReducerMap<AppState> = {
   twitter: fromTwitter.reducer
 };
 
-export const metaReducers: MetaReducer<AppState>[] = !environment.production ? [storeFreeze] : [];
+export const metaReducers: MetaReducer<AppState>[] =
+  !environment.production ? [storeFreeze, fromTwitter.metaReducer] : [fromTwitter.metaReducer];

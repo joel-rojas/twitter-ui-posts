@@ -5,7 +5,6 @@ import { Directive, HostListener, Inject, AfterContentInit } from '@angular/core
 })
 export class BodyListenerDirective implements AfterContentInit {
   public activeCls = 'active';
-  public document: Document;
   public editLayoutBtnEl: HTMLElement;
   public editLayoutBtnCls = 'nav-link dropdown-toggle form-control';
   public editLayoutBtnSelector = 'header .dropdown-toggle';
@@ -17,10 +16,7 @@ export class BodyListenerDirective implements AfterContentInit {
   @HostListener('document:click', ['$event.target']) onClick(el: HTMLElement) {
     this.showHideEditLayoutMenuComponent(el);
   }
-  constructor(@Inject('DOCUMENT') private documentArr: Document[]) {
-    const [document] = this.documentArr;
-    this.document = document;
-  }
+  constructor(@Inject('DOCUMENT') private document: Document) {}
   ngAfterContentInit() {
     this.editMenuEl = this.document.querySelector(this.editMenuSelector);
     this.editLayoutBtnEl = this.document.querySelector(this.editLayoutBtnSelector);

@@ -16,10 +16,10 @@ import { HttpConfigInterceptor} from './services/api/httpconfig.interceptor';
 import { routes } from './app.routing';
 import { TwitterEffects } from './store/twitter/twitter.effects';
 import { AppComponent } from './app.component';
-import { TwCardContainerComponent } from './components/tw-card-container/tw-card-container.component';
 import { TwPostsComponent } from './container/tw-posts/tw-posts.component';
+import { TwHeaderComponent } from './container/tw-header/tw-header.component';
+import { TwCardContainerComponent } from './components/tw-card-container/tw-card-container.component';
 import { TwCardComponent } from './components/tw-card/tw-card.component';
-import { TwHeaderComponent } from './components/tw-header/tw-header.component';
 import { TwFooterComponent } from './components/tw-footer/tw-footer.component';
 import { TwBodyComponent } from './components/tw-body/tw-body.component';
 import { TwSwitchBtnComponent } from './components/tw-switch-btn/tw-switch-btn.component';
@@ -31,11 +31,11 @@ import { TwThemeBtnComponent } from './components/tw-theme-btn/tw-theme-btn.comp
 @NgModule({
   declarations: [
     AppComponent,
+    TwPostsComponent,
     TwCardComponent,
     TwHeaderComponent,
-    TwFooterComponent,
     TwBodyComponent,
-    TwPostsComponent,
+    TwFooterComponent,
     TwCardContainerComponent,
     TwSwitchBtnComponent,
     TwIncdecCardsComponent,
@@ -57,8 +57,8 @@ import { TwThemeBtnComponent } from './components/tw-theme-btn/tw-theme-btn.comp
     MatSlideToggleModule
   ],
   providers: [
-    {provide: 'DOCUMENT', useValue: document, multi: true},
-    {provide: 'LOCAL_STORAGE', useValue: window.localStorage, multi: true},
+    {provide: 'DOCUMENT', useValue: document},
+    {provide: 'LOCAL_STORAGE', useValue: window.localStorage},
     {provide: HTTP_INTERCEPTORS, useClass: HttpConfigInterceptor, multi: true}
   ],
   bootstrap: [AppComponent]

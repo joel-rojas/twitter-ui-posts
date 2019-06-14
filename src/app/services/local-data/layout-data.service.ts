@@ -1,8 +1,11 @@
-import { LoadingService } from 'src/app/services/ui/loading.service';
 import { Injectable } from '@angular/core';
-import { LocalStorageService } from './local-storage.service';
 import { catchError } from 'rxjs/operators';
-import { of } from 'rxjs';
+import { of, Observable, BehaviorSubject } from 'rxjs';
+import { LocalStorageService } from './local-storage.service';
+import { LayoutData, LayoutDataLike, LayoutDataSubject,
+  TwitterColumnsStorage, TwitterColumnSubject, LayoutDataPropChange } from './layout-data.config';
+import { LoadingService } from '../ui/loading.service';
+import { TwitterPostsModel } from '../../store/twitter/twitter.model';
 
 @Injectable({
   providedIn: 'root'
@@ -13,11 +16,11 @@ export class LayoutDataService {
     SECOND: 'theme2',
     THIRD: 'theme3'
   };
-  public dataKey = 'app';
-  public defaultLocalData: object = {
+  public dataKey = 'twitterPostsApp';
+  public defaultLocalData: LayoutData = {
     defaultStatus: true,
     sortColumns: false,
-    twitterColumns: [30, 30, 30],
+    twitterColumns: this.twitterPostsModel.twitterUsers.map(user => ({user, value: 30})),
     twitterTheme: this.appThemes.FIRST
   };
   public readonly layoutDataKeys = {
@@ -26,21 +29,17 @@ export class LayoutDataService {
     TWITTER_COLUMNS: 'twitterColumns',
     TWITTER_THEME: 'twitterTheme'
   };
+  public defaultStatusSubject$: BehaviorSubject<LayoutDataSubject>;
+  public sortColumnsSubject$: BehaviorSubject<LayoutDataSubject>;
+  public twitterColumnsSubject$: BehaviorSubject<LayoutDataSubject>[];
+  public twitterThemeSubject$: BehaviorSubject<LayoutDataSubject>;
   constructor(
     private loadingService: LoadingService,
+    private twitterPostsModel: TwitterPostsModel,
     private localStorage: LocalStorageService) {
-    this.initLayoutLocalDataConfig();
+      this.initSubjectsValues(this.defaultLocalData);
   }
-  getLayoutData() {
-    return this.localStorage.getAppLocalStorageData(this.dataKey);
-  }
-  initLayoutLocalDataConfig() {
-    const layoutData = this.getLayoutData();
-    if (layoutData == null) {
-      this.setDefaultLayoutData();
-    }
-  }
-  setLayoutData(key: string, data: boolean|{index: number, value: number}|string) {
+  changeLayoutData(key: string, data: LayoutDataLike): LayoutData {
     const layoutData = this.getLayoutData();
     const {DEFAULT_STATUS, SORT_COLUMNS, TWITTER_COLUMNS, TWITTER_THEME} = this.layoutDataKeys;
     switch (key) {
@@ -51,27 +50,78 @@ export class LayoutDataService {
         break;
       }
       case TWITTER_COLUMNS: {
-        layoutData[key] = layoutData[key].map((column: number, idx: number, arr: number[]) => {
-          data = data as {index: number, value: number};
+        layoutData[key] = layoutData[key].map((column: TwitterColumnSubject, idx: number, arr: TwitterColumnSubject[]) => {
+          data = data as TwitterColumnSubject;
           if (data.index === idx) {
-            arr[idx] = data.value;
+            return Object.assign(column, {value: data.value, user: data.user});
           }
-          return arr[idx];
+          return {...column};
         });
         break;
       }
       default: break;
     }
-    this.localStorage.setAppLocalStorageData(this.dataKey, layoutData).pipe(
-      catchError(e => this.handleLoadingDataError())
-    );
+    return layoutData;
   }
-  setDefaultLayoutData() {
-    this.localStorage.setAppLocalStorageData(this.dataKey, this.defaultLocalData).pipe(
-      catchError(e => this.handleLoadingDataError())
-    );
+  getLayoutData(): LayoutData {
+    return this.localStorage.getAppLocalStorageData(this.dataKey);
   }
-  private handleLoadingDataError() {
+  getLayoutDataAsObservable(): Observable<LayoutData> {
+    return this.localStorage.layoutDataSubject$.asObservable();
+  }
+  getTwitterSingleColumnSubject(index: number): BehaviorSubject<LayoutDataSubject> {
+    return this.twitterColumnsSubject$[index];
+  }
+  handleLoadingDataError(): Observable<void> {
     return of(this.loadingService.setLoadingValue(-1));
+  }
+  initLayoutLocalDataConfig(): Observable<any> {
+    const layoutData: LayoutData = this.getLayoutData();
+    if (layoutData == null) {
+      return this.setDefaultLayoutData();
+    }
+    return this.setSavedLayoutData(layoutData);
+  }
+  initSubjectsValues(data: LayoutData): void {
+    this.defaultStatusSubject$ = new BehaviorSubject<LayoutDataSubject>({isChanged: false, result: data.defaultStatus});
+    this.sortColumnsSubject$ = new BehaviorSubject<LayoutDataSubject>({isChanged: false, result: data.sortColumns});
+    this.twitterColumnsSubject$ = data.twitterColumns.map(
+      (value: TwitterColumnsStorage, index: number) =>
+        new BehaviorSubject<LayoutDataSubject>({isChanged: false, result: {index, user: value.user, value: value.value}}));
+    this.twitterThemeSubject$ = new BehaviorSubject<LayoutDataSubject>({isChanged: false, result: data.twitterTheme});
+  }
+  saveDefaultStateSubjectValue(data: LayoutDataSubject) {
+    this.defaultStatusSubject$.next(data);
+  }
+  saveSortColumnSubjectValue(data: LayoutDataSubject) {
+    this.sortColumnsSubject$.next(data);
+  }
+  saveTwitterSingleColumnSubjectValue(data: LayoutDataSubject) {
+    data.result = data.result as TwitterColumnSubject;
+    this.twitterColumnsSubject$[data.result.index].next(data);
+  }
+  saveTwitterThemeColumnSubjectValue(data: LayoutDataSubject) {
+    this.twitterThemeSubject$.next(data);
+  }
+  setDefaultLayoutData(): Observable<void> {
+    return this.setLayoutData(this.dataKey, this.defaultLocalData);
+  }
+  setSingleLayoutDataProp(key: string, data: LayoutDataLike): Observable<void> {
+    const layoutData = this.changeLayoutData(key, data);
+    return this.setLayoutData(this.dataKey, layoutData);
+  }
+  setLayoutData(key: string, data: LayoutData): Observable<void> {
+    return this.localStorage.setAppLocalStorageData(key, data).pipe(
+      catchError(e => this.handleLoadingDataError())
+    );
+  }
+  setMultipleLayoutDataProps(layoutProps: LayoutDataPropChange[]): Observable<void> {
+    const newLayoutData = {};
+    layoutProps.forEach(props => Object.assign(newLayoutData, this.changeLayoutData(props.key, props.data)));
+    return this.setLayoutData(this.dataKey, newLayoutData as LayoutData);
+  }
+  setSavedLayoutData(layoutData: LayoutData): Observable<void> {
+    this.initSubjectsValues(layoutData);
+    return this.setLayoutData(this.dataKey, layoutData);
   }
 }

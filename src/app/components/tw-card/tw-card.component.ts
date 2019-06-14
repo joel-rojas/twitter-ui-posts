@@ -10,6 +10,7 @@ import { TwitterPosts } from '../../store/twitter/twitter.model';
 export class TwCardComponent implements OnInit {
   public hasUserMentions: boolean;
   public isRetweeted: boolean;
+  @Input() index: number;
   @Input() tweet: TwitterPosts;
   public readonly twitterURL = 'https://twitter.com/';
   public retweetedUserURL: string;

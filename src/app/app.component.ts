@@ -1,7 +1,7 @@
-import { LayoutDataService } from './services/local-data/layout-data.service';
 import { Component, AfterContentChecked, OnInit, OnDestroy } from '@angular/core';
-import { BehaviorSubject, Subscription } from 'rxjs';
-import { PostService } from './services/ui/post.service';
+import { Subscription, Observable } from 'rxjs';
+import { LayoutData } from './services/local-data/layout-data.config';
+import { LayoutDataService } from './services/local-data/layout-data.service';
 
 @Component({
   selector: 'app-root',
@@ -9,16 +9,24 @@ import { PostService } from './services/ui/post.service';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit, AfterContentChecked, OnDestroy {
-  public selectThemeSubject$: BehaviorSubject<string>;
+  public layoutDataSubject$: Observable<LayoutData>;
   public subscription = new Subscription();
   public themeCls: string;
   public themeClsObj: object;
   public title = 'twitter-posts-app';
-  constructor(private postService: PostService, private layoutDataService: LayoutDataService) {
-    this.selectThemeSubject$ = this.postService.selectThemeSubject$;
+  constructor(private layoutDataService: LayoutDataService) {
+    this.layoutDataSubject$ = this.layoutDataService.getLayoutDataAsObservable();
   }
   ngOnInit() {
-    this.subscription.add(this.selectThemeSubject$.subscribe(theme => this.themeCls = theme));
+    this.subscription.add(
+      this.layoutDataService.initLayoutLocalDataConfig().subscribe()
+    );
+    this.subscription.add(
+      this.layoutDataSubject$.subscribe((dataStorage: LayoutData) => {
+        const {twitterTheme} = dataStorage;
+        this.themeCls = twitterTheme;
+      }
+    ));
   }
   ngAfterContentChecked() {
     this.themeClsObj = {

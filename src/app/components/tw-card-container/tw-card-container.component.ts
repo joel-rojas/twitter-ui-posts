@@ -2,7 +2,7 @@ import { LoadingService } from 'src/app/services/ui/loading.service';
 import { Subscription, BehaviorSubject } from 'rxjs';
 import { Component, OnInit, Input, EventEmitter, Output, SimpleChanges, OnChanges, OnDestroy } from '@angular/core';
 import { CdkDragDrop } from '@angular/cdk/drag-drop';
-import { TwitterUser } from '../../store/twitter/twitter.model';
+import { TwitterUser, TwitterPosts } from '../../store/twitter/twitter.model';
 
 @Component({
   selector: 'app-tw-card-container',
@@ -15,7 +15,9 @@ export class TwCardContainerComponent implements OnInit, OnChanges, OnDestroy {
   public loadingSubject$: BehaviorSubject<number>;
   public subscriptions: Subscription = new Subscription();
   @Input() enableOrderColumn: boolean;
-  @Input() userPosts: TwitterUser[];
+  @Input() firstUserPosts: TwitterUser;
+  @Input() secondUserPosts: TwitterUser;
+  @Input() thirdUserPosts: TwitterUser;
   @Output() dragDropTwitterPostsColumn: EventEmitter<any> = new EventEmitter(null);
   constructor(private loadingService: LoadingService) {
     this.loadingSubject$ = this.loadingService.loadingSubject;
@@ -42,6 +44,8 @@ export class TwCardContainerComponent implements OnInit, OnChanges, OnDestroy {
       'tw-posts-drag-drop--ctn-list--item-disabled': !this.enableOrderColumn
     };
   }
+  trackByPosts(index: number, post: TwitterPosts): string { return post.id_str; }
+  // Events
   onDropTwitterUsersPosts(event: CdkDragDrop<object[]>) {
     const {previousIndex, currentIndex} = event;
     this.dragDropTwitterPostsColumn.emit({previousIndex, currentIndex});

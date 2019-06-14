@@ -8,6 +8,7 @@ html, body {
 :root {
   --app-black: #37474f;
   --app-white: #ffffff;
+  --app-light-grey: #ced4da;
   --app-theme1-blue: #2196f3;
   --app-theme1-light-blue: #6ec6ff;
   --app-theme1-dark-blue: #0069c0;

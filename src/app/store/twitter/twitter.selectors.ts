@@ -3,13 +3,13 @@ import * as fromReducer from './twitter.reducer';
 import * as fromModel from './twitter.model';
 
 
-function getTwitterPostsByName(users: Array<{id: number, user: string, posts: fromModel.TwitterPosts[]}>, name: string) {
-  return users.filter(data => data.user === name);
+function getTwitterPostsByName(users: fromModel.TwitterUser[], name: string) {
+  return users.find(data => data.user === name);
 }
 
 function getTwitterUser(name: string) {
-  return (users: Array<{id: number, user: string, posts: fromModel.TwitterPosts[]}>) => {
-    return users ? getTwitterPostsByName(users, name) : [];
+  return (users: fromModel.TwitterUser[]) => {
+    return users.length > 0 ? getTwitterPostsByName(users, name) : null;
   };
 }
 

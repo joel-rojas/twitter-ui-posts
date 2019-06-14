@@ -5,6 +5,7 @@
   width: 55px;
   height: 55px;
   position: relative;
+  cursor: pointer;
   border-radius: 50%;
 }
 .tw-theme-ctn .radio-btn:focus {

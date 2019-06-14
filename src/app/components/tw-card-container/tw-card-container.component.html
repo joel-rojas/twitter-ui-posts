@@ -4,9 +4,17 @@
       [cdkDropListDisabled]="!enableOrderColumn"
       cdkDropListOrientation="horizontal"
       (cdkDropListDropped)="onDropTwitterUsersPosts($event)">
-      <div *ngFor="let user of userPosts;" cdkDrag [ngClass]="dragDropListCSS" class="col-12 col-lg-4 tw-posts-drag-drop--ctn-list--item">
-        <h3>{{user.user}}</h3>
-        <app-tw-card *ngFor="let post of user.posts" [tweet]="post"></app-tw-card>
+      <div *ngIf="firstUserPosts !== null" cdkDrag [ngClass]="dragDropListCSS" class="col-12 col-lg-4 tw-posts-drag-drop--ctn-list--item">
+        <h3>{{firstUserPosts.user}}</h3>
+        <app-tw-card *ngFor="let post of firstUserPosts.posts; trackBy: trackByPosts; let i = index;" [tweet]="post" [index]="i"></app-tw-card>
+      </div>
+      <div *ngIf="secondUserPosts !== null" cdkDrag [ngClass]="dragDropListCSS" class="col-12 col-lg-4 tw-posts-drag-drop--ctn-list--item">
+        <h3>{{secondUserPosts.user}}</h3>
+        <app-tw-card *ngFor="let post of secondUserPosts.posts; trackBy: trackByPosts; let i = index;" [tweet]="post" [index]="i"></app-tw-card>
+      </div>
+      <div *ngIf="thirdUserPosts !== null" cdkDrag [ngClass]="dragDropListCSS" class="col-12 col-lg-4 tw-posts-drag-drop--ctn-list--item">
+        <h3>{{thirdUserPosts.user}}</h3>
+        <app-tw-card *ngFor="let post of thirdUserPosts.posts; trackBy: trackByPosts; let i = index;" [tweet]="post" [index]="i"></app-tw-card>
       </div>
   </div>
 </div>
