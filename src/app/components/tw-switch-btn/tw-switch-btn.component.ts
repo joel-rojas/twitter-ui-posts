@@ -26,7 +26,7 @@ export class TwSwitchBtnComponent implements OnInit, AfterContentChecked {
   @Input() description: string;
   @Input() disabled: boolean;
   @Output() switchBtn: EventEmitter<boolean> = new EventEmitter(null);
-  public switchButtonCls;
+  public switchButtonCls: object;
   constructor() { }
 
   ngOnInit() {

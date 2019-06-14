@@ -2,3 +2,53 @@
   display: inherit;
   margin-bottom: 10px;
 }
+
+.card .card-title {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.card .card-title h5 {
+  margin-left: 0.5rem;
+  margin-bottom: 0;
+}
+
+.card .card-subtitle {
+  display: flex;
+  flex-direction: column;
+}
+
+.card .retweet-ctn label {
+  margin-bottom: 0;
+}
+
+.card .card-text.mentions-ctn ul{
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: row;
+  justify-items: end;
+  flex-wrap: wrap;
+}
+
+.card .card-text.mentions-ctn ul li {
+  display: inline;
+}
+
+.card .card-text.mentions-ctn ul li::after {
+  content: ",\00a0"
+}
+
+.card .card-text.mentions-ctn ul li:first-child::after,
+.card .card-text.mentions-ctn ul li:last-child::after {
+  content: "\00a0"
+}
+
+@media (min-width: 1200px) {
+  .card .card-subtitle {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+  }
+}

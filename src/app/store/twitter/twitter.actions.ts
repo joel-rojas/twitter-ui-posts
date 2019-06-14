@@ -1,26 +1,25 @@
+import { TwitterColumnSubject } from './../../services/local-data/layout-data.config';
 import { Action } from '@ngrx/store';
-import { Update } from '@ngrx/entity';
 import { TwitterPosts } from './twitter.model';
+import { TwitterColumnsStorage } from 'src/app/services/local-data/layout-data.config';
 
 export enum TwitterActionTypes {
   LoadTwitterPosts = '[Twitter] Load Twitters Posts',
   TwitterPostsLoaded = '[Twitter] Twitter Posts Loaded',
   SwitchTwitterPosts = '[Twitter] Switch Twitter Posts',
   ModifyTwitterPostsQty = '[Twitter] Modify Twitter Posts Quantity',
-  TwitterPostsLoadingError = '[Twitter] Load Twitter Posts Error',
-  AddTwitter = '[Twitter] Add Twitter',
-  UpsertTwitter = '[Twitter] Upsert Twitter',
-  AddTwitters = '[Twitter] Add Twitters',
-  UpsertTwitters = '[Twitter] Upsert Twitters',
-  UpdateTwitter = '[Twitter] Update Twitter',
-  UpdateTwitters = '[Twitter] Update Twitters',
-  DeleteTwitter = '[Twitter] Delete Twitter',
-  DeleteTwitters = '[Twitter] Delete Twitters',
-  ClearTwitters = '[Twitter] Clear Twitters'
+  TwitterPostsLoadingError = '[Twitter] Error Loading Twitter Posts',
+  ReOrderTwitterPosts = '[Twitter] Reorder Twitter Posts Columns',
+  NoOpTwitterPosts = '[Twitter] No Operation on Twitter Posts',
+  ResetTwitterPosts = '[Twitter] Reset Twitter Posts'
 }
 
 export class LoadTwitterPosts implements Action {
   readonly type = TwitterActionTypes.LoadTwitterPosts;
+}
+
+export class ResetTwitterPosts implements Action {
+  readonly type = TwitterActionTypes.ResetTwitterPosts;
 }
 
 export class TwitterPostsLoaded implements Action {
@@ -35,64 +34,20 @@ export class SwitchTwitterPosts implements Action {
 
 export class ModifyTwitterPostsQty implements Action {
   readonly type = TwitterActionTypes.ModifyTwitterPostsQty;
-  constructor(public payload: { index: number, value: number }) {}
+  constructor(public payload: TwitterColumnSubject) {}
 }
 
 export class TwitterPostsLoadingError implements Action {
   readonly type = TwitterActionTypes.TwitterPostsLoadingError;
-  constructor(public payload: {error: any}) {}
 }
 
-export class AddTwitter implements Action {
-  readonly type = TwitterActionTypes.AddTwitter;
-
-  constructor(public payload: { twitterPost: TwitterPosts }) {}
+export class ReOrderTwitterPosts implements Action {
+  readonly type = TwitterActionTypes.ReOrderTwitterPosts;
+  constructor(public payload: {twitterColumns: TwitterColumnsStorage[]}) {}
 }
 
-export class UpsertTwitter implements Action {
-  readonly type = TwitterActionTypes.UpsertTwitter;
-
-  constructor(public payload: { twitterPost: TwitterPosts }) {}
-}
-
-export class AddTwitters implements Action {
-  readonly type = TwitterActionTypes.AddTwitters;
-
-  constructor(public payload: { twitterPosts: TwitterPosts[] }) {}
-}
-
-export class UpsertTwitters implements Action {
-  readonly type = TwitterActionTypes.UpsertTwitters;
-
-  constructor(public payload: { twitterPosts: TwitterPosts[] }) {}
-}
-
-export class UpdateTwitter implements Action {
-  readonly type = TwitterActionTypes.UpdateTwitter;
-
-  constructor(public payload: { twitter: Update<TwitterPosts> }) {}
-}
-
-export class UpdateTwitters implements Action {
-  readonly type = TwitterActionTypes.UpdateTwitters;
-
-  constructor(public payload: { twitterPosts: Update<TwitterPosts>[] }) {}
-}
-
-export class DeleteTwitter implements Action {
-  readonly type = TwitterActionTypes.DeleteTwitter;
-
-  constructor(public payload: { id: string }) {}
-}
-
-export class DeleteTwitters implements Action {
-  readonly type = TwitterActionTypes.DeleteTwitters;
-
-  constructor(public payload: { ids: string[] }) {}
-}
-
-export class ClearTwitters implements Action {
-  readonly type = TwitterActionTypes.ClearTwitters;
+export class NoOpTwitterPosts implements Action {
+  readonly type = TwitterActionTypes.NoOpTwitterPosts;
 }
 
 export type TwitterActions =
@@ -101,12 +56,6 @@ LoadTwitterPosts
  | SwitchTwitterPosts
  | ModifyTwitterPostsQty
  | TwitterPostsLoadingError
- | AddTwitter
- | UpsertTwitter
- | AddTwitters
- | UpsertTwitters
- | UpdateTwitter
- | UpdateTwitters
- | DeleteTwitter
- | DeleteTwitters
- | ClearTwitters;
+ | ReOrderTwitterPosts
+ | NoOpTwitterPosts
+ | ResetTwitterPosts;

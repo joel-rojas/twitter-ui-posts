@@ -4,9 +4,15 @@
 }
 
 footer div.col-12 {
-  height: 5vh
+  height: 8vh
 }
 
 footer div.col-12 p {
   margin: 0;
+}
+
+@media (min-width: 992px) {
+  footer div.col-12 {
+    height: 5vh;
+  }
 }

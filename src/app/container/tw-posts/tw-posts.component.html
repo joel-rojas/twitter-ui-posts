@@ -1,6 +1,8 @@
 <app-tw-body>
   <app-tw-card-container
-    [userPosts]="userPosts$ | async"
+    [firstUserPosts]="firstUserPosts$ | async"
+    [secondUserPosts]="secondUserPosts$ | async"
+    [thirdUserPosts]="thirdUserPosts$ | async"
     [enableOrderColumn]="enableOrderColumn"
     (dragDropTwitterPostsColumn)="onDropTwitterUserPostsEv($event)">
   </app-tw-card-container>

@@ -4,13 +4,14 @@ import { of, Observable, zip, throwError } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { TwitterPosts, TwitterPostsModel } from './../../store/twitter/twitter.model';
 import { environment } from '../../../environments/environment.prod';
+// import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ApiService {
-  readonly baseURL = environment.api.baseURL;
-  readonly twitterUsers: string[] = [...this.twitterPostModel.twitterUsers];
+  public readonly baseURL = environment.api.baseURL;
+  public readonly twitterUsers: string[] = [...this.twitterPostModel.twitterUsers];
   constructor(private http: HttpClient, private twitterPostModel: TwitterPostsModel) { }
   fetchTwitterUsersData(): Observable<TwitterPosts[]> {
     const twitterUsersAPICalls: Observable<TwitterPosts[]>[] = this.twitterUsers.map(user => {

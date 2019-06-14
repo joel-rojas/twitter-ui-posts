@@ -3,6 +3,9 @@ import { TwPostsComponent } from './container/tw-posts/tw-posts.component';
 
 export const routes: Routes = [
   {
-    path: '', component: TwPostsComponent
+    path: '', pathMatch: 'full', redirectTo: '/twitter-posts'
+  },
+  {
+    path: 'twitter-posts', component: TwPostsComponent
   }
 ];

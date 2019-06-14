@@ -3,8 +3,8 @@
 }
 
 .incdec-ctn .form-group {
-  justify-content: center;
   width: 100%;
+  display: flex;
 }
 
 .incdec-ctn .form-group .col-form-label,
@@ -43,5 +43,6 @@
 
 .incdec-ctn .form-group input.form-control:disabled,
 .incdec-ctn .form-group input.form-control[readonly] {
-  background: white;
+  background: #ffffff;
+  background: var(--app-white);
 }

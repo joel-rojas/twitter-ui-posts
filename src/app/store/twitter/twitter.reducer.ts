@@ -1,18 +1,18 @@
+import { AppState } from './../index';
 import { EntityState, EntityAdapter, createEntityAdapter } from '@ngrx/entity';
-import { TwitterPosts, TwitterPostsModel } from './twitter.model';
+import { TwitterPosts, TwitterUser, TwitterPostsModel } from './twitter.model';
 import { TwitterActions, TwitterActionTypes } from './twitter.actions';
+import { ActionReducer } from '@ngrx/store';
 
 export interface TwitterState extends EntityState<TwitterPosts> {
   // additional entities state properties
-  users: {id: number; user: string; posts: TwitterPosts[]}[];
-  error: any;
+  users: TwitterUser[];
 }
 
 export const emptyTwitterPosts: TwitterState = {
   ids: [],
   entities: null,
-  users: [],
-  error: null
+  users: []
 };
 
 export const adapter: EntityAdapter<TwitterPosts> = createEntityAdapter<TwitterPosts>();
@@ -24,84 +24,63 @@ export function reducer(
   action: TwitterActions
 ): TwitterState {
   switch (action.type) {
-    case TwitterActionTypes.AddTwitter: {
-      return adapter.addOne(action.payload.twitterPost, state);
-    }
-
-    case TwitterActionTypes.UpsertTwitter: {
-      return adapter.upsertOne(action.payload.twitterPost, state);
-    }
-
-    case TwitterActionTypes.AddTwitters: {
-      return adapter.addMany(action.payload.twitterPosts, state);
-    }
-
-    case TwitterActionTypes.UpsertTwitters: {
-      return adapter.upsertMany(action.payload.twitterPosts, state);
-    }
-
-    case TwitterActionTypes.UpdateTwitter: {
-      return adapter.updateOne(action.payload.twitter, state);
-    }
-
-    case TwitterActionTypes.UpdateTwitters: {
-      return adapter.updateMany(action.payload.twitterPosts, state);
-    }
-
-    case TwitterActionTypes.DeleteTwitter: {
-      return adapter.removeOne(action.payload.id, state);
-    }
-
-    case TwitterActionTypes.DeleteTwitters: {
-      return adapter.removeMany(action.payload.ids, state);
-    }
 
     case TwitterActionTypes.TwitterPostsLoaded: {
       const twitterPostsModel = new TwitterPostsModel();
       const {twitterPosts} = action.payload;
       const filteredByUser = twitterPostsModel.filterTwitterPostsByUser(twitterPosts);
-      const users = Object.keys(filteredByUser).map((key, idx) => ({id: idx, user: key, posts: filteredByUser[key]}));
+      const users = twitterPostsModel.getTwitterUsersByTwitterPosts(filteredByUser);
       return Object.assign({}, adapter.addAll(twitterPosts, state), {users});
     }
 
     case TwitterActionTypes.SwitchTwitterPosts: {
+      const twitterPostsModel = new TwitterPostsModel();
       const {previousIndex, currentIndex} = action.payload;
       const {users} = state;
-      const newUsers = users.map(user => ({...user}))
-        .map((user, idx, arr) => {
-          if (arr[idx] === arr[previousIndex]) {
-            return arr[currentIndex];
-          } else if (arr[idx] === arr[currentIndex]) {
-            return arr[previousIndex];
-          }
-          return user;
-        });
+      const newUsers = twitterPostsModel.switchTwitterPostsByUser(users, previousIndex, currentIndex);
       return {...state, users: newUsers};
     }
 
     case TwitterActionTypes.ModifyTwitterPostsQty: {
       const twitterPostsModel = new TwitterPostsModel();
-      const {index, value} = action.payload;
+      const {user, value} = action.payload;
       const {users, entities} = state;
-      const {user} = users[index];
-      const userPosts = twitterPostsModel.getTwitterPostsByUser(user, entities);
       const newUsers = twitterPostsModel.getClonedUsersData(users);
-      newUsers[index].posts = userPosts.slice(0, value);
-      return {...state, users: newUsers};
-    }
-    case TwitterActionTypes.TwitterPostsLoadingError: {
-      const {error} = action.payload;
-      return {...state, error};
+      const userPosts = twitterPostsModel.getTwitterPostsByUser(user, entities);
+      const modifiedUserPosts = twitterPostsModel.changeTwitterPostsQuantityByUser(newUsers, userPosts, user, value);
+      return {...state, users: modifiedUserPosts};
     }
 
-    case TwitterActionTypes.ClearTwitters: {
-      return adapter.removeAll(state);
+    case TwitterActionTypes.ReOrderTwitterPosts: {
+      const twitterPostsModel = new TwitterPostsModel();
+      const {twitterColumns} = action.payload;
+      const {users} = state;
+      const newUsers = twitterPostsModel.getClonedUsersData(users);
+      const reOrderedUsers = twitterPostsModel.reorderTwitterPostsByLocalStorage(twitterColumns, newUsers);
+      return {...state, users: reOrderedUsers};
     }
 
     default: {
       return state;
     }
   }
+}
+
+export function metaReducer(appReducer: ActionReducer<AppState>): ActionReducer<AppState> {
+  return (state: AppState, action: TwitterActions) => {
+    if (action.type === TwitterActionTypes.ResetTwitterPosts) {
+      const twitterPostsModel = new TwitterPostsModel();
+      const {users, entities} = state.twitter;
+      const newUsers = twitterPostsModel.getTwitterPostsSortedByDefault(users, entities);
+      return {
+        ...state,
+        twitter: {
+          ...state.twitter, users: newUsers
+        }
+      };
+    }
+    return appReducer(state, action);
+  };
 }
 
 
