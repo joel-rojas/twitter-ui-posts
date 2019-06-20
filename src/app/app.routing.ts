@@ -3,6 +3,6 @@ import { TwPostsComponent } from './container/tw-posts/tw-posts.component';
 
 export const routes: Routes = [
   {
-    path: '/', component: TwPostsComponent
+    path: '', component: TwPostsComponent
   }
 ];
