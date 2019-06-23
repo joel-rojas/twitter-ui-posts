@@ -1,0 +1,76 @@
+<header>
+  <nav class="navbar navbar-expand-lg navbar-dark">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="https://joel-rojas.github.io/twitter-posts-app/">Twitter Posts App</a>
+      <button (click)="toggleNavbarEvent()" class="navbar-toggler" type="button" aria-controls="menuNavbar" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div [ngClass]="menuNavbarCSSClasses" class="navbar-collapse" id="menuNavbar">
+        <form class="form-inline">
+          <button type="button" (click)="openEditLayoutEvent()" [disabled]="isEditLayoutBtnDisabled" class="nav-link dropdown-toggle form-control" id="editLayoutLink" role="button" aria-haspopup="true" aria-expanded="false">
+            Edit Layout
+          </button>
+          <div class="dropdown-menu" aria-labelledby="editLayoutLink" >
+            <div class="dropdown-item order-column-item">
+              <app-tw-switch-btn
+                [className]="switchCls"
+                [label]="switchLabel"
+                [labelPosition]="switchLabelPosition"
+                [checked]="isButtonSwitched"
+                [description]="switchDescription"
+                (switchBtn)="onSwitchBtnEvent($event)">
+              </app-tw-switch-btn>
+            </div>
+            <div class="dropdown-item inc-dec-twposts-item">
+              <h6><strong>Increase/Decrease Tweets</strong></h6>
+              <app-tw-incdec-cards
+                [value]="firstTwColumnQty"
+                [label]="firstTwColumnLbl"
+                (decreaseValue)="onDecreaseFirstValueEvent($event)"
+                (increaseValue)="onIncreaseFirstValueEvent($event)">
+              </app-tw-incdec-cards>
+              <app-tw-incdec-cards
+                [value]="secondTwColumnQty"
+                [label]="secondTwColumnLbl"
+                (decreaseValue)="onDecreaseSecondValueEvent($event)"
+                (increaseValue)="onIncreaseSecondValueEvent($event)">
+              </app-tw-incdec-cards>
+              <app-tw-incdec-cards
+                [value]="thirdTwColumnQty"
+                [label]="thirdTwColumnLbl"
+                (decreaseValue)="onDecreaseThirdValueEvent($event)"
+                (increaseValue)="onIncreaseThirdValueEvent($event)">
+              </app-tw-incdec-cards>
+            </div>
+            <div class="dropdown-item change-theme-item">
+              <h6><strong>Change Theme</strong></h6>
+              <div class="row">
+                <app-tw-theme-btn
+                  [select]="selectedTheme"
+                  [defaultCls]="firstThemeCls"
+                  [isActive]="isFirstThemeActive"
+                  (selectTwTheme)="onSelectFirstTheme()">
+                </app-tw-theme-btn>
+                <app-tw-theme-btn
+                  [select]="selectedTheme"
+                  [defaultCls]="secondThemeCls"
+                  [isActive]="isSecondThemeActive"
+                  (selectTwTheme)="onSelectSecondTheme()">
+                </app-tw-theme-btn>
+                <app-tw-theme-btn
+                  [select]="selectedTheme"
+                  [defaultCls]="thirdThemeCls"
+                  [isActive]="isThirdThemeActive"
+                  (selectTwTheme)="onSelectThirdTheme()">
+                </app-tw-theme-btn>
+              </div>
+            </div>
+            <div class="dropdown-item clear-changes" (click)="onClearLayoutChanges()">
+              <a><strong>Clear Changes</strong></a>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </nav>
+</header>

@@ -1,3 +1,6 @@
 export const environment = {
-  production: true
+  production: true,
+  api: {
+    baseURL: 'https://twserver.emersonrojas.com/'
+  }
 };

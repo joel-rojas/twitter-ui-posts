@@ -1,0 +1,48 @@
+.incdec-ctn {
+  padding: 5px 0;
+}
+
+.incdec-ctn .form-group {
+  width: 100%;
+  display: flex;
+}
+
+.incdec-ctn .form-group .col-form-label,
+.incdec-ctn .form-group .incdec-group {
+  flex: 1 0 0;
+}
+
+.incdec-ctn .form-group .incdec-group {
+  display: flex;
+  justify-content: center;
+}
+
+.incdec-ctn .form-group .incdec-group input.form-control {
+  flex: none;
+}
+
+.incdec-ctn .form-group input[type='number'] {
+  -moz-appearance: textfield;
+}
+
+.incdec-ctn .form-group input::-webkit-outer-spin-button,
+.incdec-ctn .form-group input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+}
+
+.incdec-ctn .form-group input.form-control,
+.incdec-ctn .form-group button {
+  height: 44px;
+  width: 44px;
+  text-align: center;
+}
+
+.incdec-ctn .form-group button {
+  line-height: 0;
+}
+
+.incdec-ctn .form-group input.form-control:disabled,
+.incdec-ctn .form-group input.form-control[readonly] {
+  background: #ffffff;
+  background: var(--app-white);
+}

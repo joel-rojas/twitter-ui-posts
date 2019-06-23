@@ -1,0 +1,23 @@
+:host {
+  display: block;
+  width: 100%;
+}
+
+.container-fluid.body-ctn, .container-fluid.failed-content-ctn {
+  padding-top: 10vh;
+  min-height: 90vh;
+}
+
+.container-fluid.failed-content-ctn .col-12 {
+  height: 90vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+@media (min-width: 992px) {
+  .container-fluid.body-ctn, .container-fluid.failed-content-ctn {
+    padding-top: 5vh;
+    min-height: 95vh;
+  }
+}
