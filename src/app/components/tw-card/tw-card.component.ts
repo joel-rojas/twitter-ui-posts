@@ -21,7 +21,7 @@ export class TwCardComponent implements OnInit {
   ngOnInit() {
     this.hasUserMentions = this.tweet.entities.user_mentions != null && this.tweet.entities.user_mentions.length > 0;
     this.twitterUserURL = `${this.twitterURL}${this.tweet.user.screen_name}`;
-    this.twitterUserImgURL = `${this.tweet.user.profile_image_url}`;
+    this.twitterUserImgURL = `${this.tweet.user.profile_image_url_https}`;
     this.twitterUserPostURL = `${this.twitterUserURL}/status/${this.tweet.id_str}`;
     this.isRetweeted = this.tweet.retweeted_status != null;
     if (this.isRetweeted) {
