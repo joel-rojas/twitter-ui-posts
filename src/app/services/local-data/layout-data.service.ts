@@ -17,22 +17,22 @@ export class LayoutDataService {
     SECOND: 'theme2',
     THIRD: 'theme3'
   };
-  public dataKey = 'twitterPostsApp';
-  public defaultLocalData: LayoutData = {
-    defaultStatus: true,
-    sortColumns: false,
-    twitterColumns: this.twitterPostsModel.twitterUsers.map(user => ({user, value: this.MAX_TWITTER_POSTS_ITEMS})),
-    twitterTheme: this.appThemes.FIRST
-  };
+  public readonly dataKey = 'twitterPostsApp';
+  public readonly MAX_TWITTER_POSTS_ITEMS = this.twitterPostsModel.MAX_TWITTER_POSTS;
+  public readonly MIN_TWITTER_POSTS_ITEMS = this.twitterPostsModel.MIN_TWITTER_POSTS;
   public readonly layoutDataKeys = {
     DEFAULT_STATUS: 'defaultStatus',
     SORT_COLUMNS: 'sortColumns',
     TWITTER_COLUMNS: 'twitterColumns',
     TWITTER_THEME: 'twitterTheme'
   };
+  public defaultLocalData: LayoutData = {
+    defaultStatus: true,
+    sortColumns: false,
+    twitterColumns: this.twitterPostsModel.twitterUsers.map(user => ({user, value: this.MAX_TWITTER_POSTS_ITEMS})),
+    twitterTheme: this.appThemes.FIRST
+  };
   public defaultStatusSubject$: BehaviorSubject<LayoutDataSubject>;
-  public readonly MAX_TWITTER_POSTS_ITEMS = this.twitterPostsModel.MAX_TWITTER_POSTS;
-  public readonly MIN_TWITTER_POSTS_ITEMS = this.twitterPostsModel.MIN_TWITTER_POSTS;
   public sortColumnsSubject$: BehaviorSubject<LayoutDataSubject>;
   public twitterColumnsSubject$: BehaviorSubject<LayoutDataSubject>[];
   public twitterThemeSubject$: BehaviorSubject<LayoutDataSubject>;
