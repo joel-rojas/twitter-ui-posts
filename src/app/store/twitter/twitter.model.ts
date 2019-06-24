@@ -56,14 +56,14 @@ export interface TwitterUserSelector {
 
 @Injectable({providedIn: 'root'})
 export class TwitterPostsModel {
+  public readonly MAX_TWITTER_POSTS = 10;
+  public readonly MIN_TWITTER_POSTS = 1;
   public readonly twitterUsers: string[] = [TwitterUsers.MakeSchool, TwitterUsers.NewsYCombinator, TwitterUsers.YCombinator];
-  // public readonly twitterUsers: string[] = [TwitterUsers.MakeSchool];
   constructor() {}
-  changeTwitterPostsQuantityByUser(users: TwitterUser[], posts: TwitterPosts[], user: string, value: number) {
+  changeTwitterPostsQuantityByUser(users: TwitterUser[], posts: TwitterPosts[], user: string, value: number): TwitterUser[] {
     return users.map(tw => {
       if (tw.user === user) {
-        const MAX_ITEMS = 30;
-        return {...tw, posts: posts.slice(MAX_ITEMS - value, MAX_ITEMS)};
+        return {...tw, posts: posts.slice(this.MAX_TWITTER_POSTS - value, this.MAX_TWITTER_POSTS)};
       }
       return tw;
     });
@@ -85,7 +85,7 @@ export class TwitterPostsModel {
     const userTwitterPostsIdxs = twitterPostKeys.filter((postIdx) => (entities[postIdx] as TwitterPosts).user.screen_name === user);
     return userTwitterPostsIdxs.map(postIdx => entities[postIdx]);
   }
-  getTwitterPostsSortedByDefault(users: TwitterUser[], entities: Dictionary<TwitterPosts>) {
+  getTwitterPostsSortedByDefault(users: TwitterUser[], entities: Dictionary<TwitterPosts>): TwitterUser[] {
     return this.twitterUsers.map((user) => {
       const newUser = users.find(tw => tw.user === user);
       return {...newUser, posts: this.getTwitterPostsByUser(newUser.user, entities)};

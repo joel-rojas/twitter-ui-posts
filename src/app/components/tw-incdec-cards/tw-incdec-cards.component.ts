@@ -1,4 +1,5 @@
 import { Component, OnInit, Output, EventEmitter, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { LayoutDataService } from './../../services/local-data/layout-data.service';
 
 @Component({
   selector: 'app-tw-incdec-cards',
@@ -6,8 +7,8 @@ import { Component, OnInit, Output, EventEmitter, Input, OnChanges, SimpleChange
   styleUrls: ['./tw-incdec-cards.component.css']
 })
 export class TwIncdecCardsComponent implements OnInit, OnChanges {
-  public maxValue = 30;
-  public minValue = 1;
+  public maxValue = this.layoutDataService.MAX_TWITTER_POSTS_ITEMS;
+  public minValue = this.layoutDataService.MIN_TWITTER_POSTS_ITEMS;
   public disableInput = true;
   public disableDecrementBtn = false;
   public disableIncrementBtn = true;
@@ -15,7 +16,7 @@ export class TwIncdecCardsComponent implements OnInit, OnChanges {
   @Input() label: string;
   @Output() decreaseValue: EventEmitter<number> = new EventEmitter(null);
   @Output() increaseValue: EventEmitter<number> = new EventEmitter(null);
-  constructor() { }
+  constructor(private layoutDataService: LayoutDataService) { }
 
   ngOnInit() {
   }

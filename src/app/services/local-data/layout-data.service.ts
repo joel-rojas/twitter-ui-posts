@@ -1,3 +1,4 @@
+import { PostService } from './../ui/post.service';
 import { Injectable } from '@angular/core';
 import { catchError } from 'rxjs/operators';
 import { of, Observable, BehaviorSubject } from 'rxjs';
@@ -20,7 +21,7 @@ export class LayoutDataService {
   public defaultLocalData: LayoutData = {
     defaultStatus: true,
     sortColumns: false,
-    twitterColumns: this.twitterPostsModel.twitterUsers.map(user => ({user, value: 30})),
+    twitterColumns: this.twitterPostsModel.twitterUsers.map(user => ({user, value: this.MAX_TWITTER_POSTS_ITEMS})),
     twitterTheme: this.appThemes.FIRST
   };
   public readonly layoutDataKeys = {
@@ -30,6 +31,8 @@ export class LayoutDataService {
     TWITTER_THEME: 'twitterTheme'
   };
   public defaultStatusSubject$: BehaviorSubject<LayoutDataSubject>;
+  public readonly MAX_TWITTER_POSTS_ITEMS = this.twitterPostsModel.MAX_TWITTER_POSTS;
+  public readonly MIN_TWITTER_POSTS_ITEMS = this.twitterPostsModel.MIN_TWITTER_POSTS;
   public sortColumnsSubject$: BehaviorSubject<LayoutDataSubject>;
   public twitterColumnsSubject$: BehaviorSubject<LayoutDataSubject>[];
   public twitterThemeSubject$: BehaviorSubject<LayoutDataSubject>;
