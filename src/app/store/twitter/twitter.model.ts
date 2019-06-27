@@ -1,7 +1,7 @@
-import { TwitterColumnsStorage } from 'src/app/services/local-data/layout-data.config';
 import { Injectable } from '@angular/core';
 import { Dictionary } from '@ngrx/entity';
 import { MemoizedSelector } from '@ngrx/store';
+import { TwitterColumnsStorage } from '../../services/local-data/layout-data.config';
 
 export enum TwitterUsers {
   MakeSchool = 'MakeSchool',

@@ -1,7 +1,7 @@
-import { LoadingService } from 'src/app/services/ui/loading.service';
 import { Subscription, BehaviorSubject } from 'rxjs';
 import { Component, OnInit, Input, EventEmitter, Output, SimpleChanges, OnChanges, OnDestroy } from '@angular/core';
 import { CdkDragDrop } from '@angular/cdk/drag-drop';
+import { LoadingService } from '../../services/ui/loading.service';
 import { TwitterUser, TwitterPosts } from '../../store/twitter/twitter.model';
 
 @Component({

@@ -1,11 +1,11 @@
-import { Store, select } from '@ngrx/store';
+import { Store } from '@ngrx/store';
 import { Injectable } from '@angular/core';
 import { Actions, Effect, ofType } from '@ngrx/effects';
-import { of } from 'rxjs';
+import { of, zip, Observable } from 'rxjs';
 import { AppState } from './../index';
 import { switchMap, map, catchError, tap, take } from 'rxjs/operators';
 import { ApiService } from './../../services/api/api.service';
-import { LayoutData, TwitterColumnsStorage } from './../../services/local-data/layout-data.config';
+import { LayoutData } from './../../services/local-data/layout-data.config';
 import { PostService } from './../../services/ui/post.service';
 import { LoadTwitterPosts,
   TwitterActionTypes,
@@ -14,7 +14,6 @@ import { LoadTwitterPosts,
   ReOrderTwitterPosts,
   NoOpTwitterPosts } from './twitter.actions';
 import { TwitterPosts, TwitterUser } from './twitter.model';
-import { TwPostsComponent } from 'src/app/container/tw-posts/tw-posts.component';
 
 
 @Injectable()
@@ -26,20 +25,21 @@ export class TwitterEffects {
       switchMap((action: LoadTwitterPosts) =>
         this.apiService.fetchTwitterUsersData().pipe(
           tap((twitterPosts: TwitterPosts[]) => this.store.dispatch(new TwitterPostsLoaded({twitterPosts}))),
-          switchMap(() => this.postService.filledUsersPosts$),
-          switchMap((twitterUsers: TwitterUser[]) =>
-            this.postService.filledLayoutData$.pipe(
-              map((dataStorage: LayoutData) => {
-                const {twitterColumns} = dataStorage;
-                const isSameTwitterPostsOrder = this.postService.isSameTwitterPostsOrderByStorage(twitterColumns, twitterUsers);
-                if (!isSameTwitterPostsOrder) {
-                  this.postService.setReOrderedSelectors(twitterColumns);
-                  return new ReOrderTwitterPosts({twitterColumns});
-                }
-                return new NoOpTwitterPosts();
-              }),
-              take(1)
-            )
+          switchMap(() =>
+            zip(this.postService.filledUsersPosts$, this.postService.filledLayoutData$.pipe(take(1))).pipe(
+              map(([twitterUsers, dataStorage]) => of({twitterUsers, dataStorage}))
+          )),
+          switchMap((latestData: Observable<{twitterUsers: TwitterUser[], dataStorage: LayoutData}>) =>
+            latestData.pipe(map(data => {
+              const {twitterUsers, dataStorage} = data;
+              const {twitterColumns} = dataStorage;
+              const isSameTwitterPostsOrder = this.postService.isSameTwitterPostsOrderByStorage(twitterColumns, twitterUsers);
+              if (!isSameTwitterPostsOrder) {
+                this.postService.setReOrderedSelectors(twitterColumns);
+                return new ReOrderTwitterPosts({twitterColumns});
+              }
+              return new NoOpTwitterPosts();
+            }))
           ),
           catchError((error) => of(new TwitterPostsLoadingError()))
         )

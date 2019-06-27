@@ -1,4 +1,3 @@
-import { TwitterColumnsStorage } from 'src/app/services/local-data/layout-data.config';
 import { Injectable } from '@angular/core';
 import { Store, select } from '@ngrx/store';
 import { zip, Observable, combineLatest, BehaviorSubject, EMPTY } from 'rxjs';
@@ -11,7 +10,7 @@ import { selectTwitterPostsByUser,
 } from './../../store/twitter/twitter.selectors';
 import { TwitterUser, TwitterUserSelector } from './../../store/twitter/twitter.model';
 import { LayoutDataService } from './../local-data/layout-data.service';
-import { LayoutDataLike, LayoutData, TwitterColumnSubject } from './../local-data/layout-data.config';
+import { LayoutDataLike, LayoutData, TwitterColumnsStorage, TwitterColumnSubject } from './../local-data/layout-data.config';
 
 @Injectable({
   providedIn: 'root'

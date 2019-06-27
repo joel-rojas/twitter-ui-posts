@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { LoadingService } from 'src/app/services/ui/loading.service';
 import { Subscription, BehaviorSubject } from 'rxjs';
+import { LoadingService } from '../../services/ui/loading.service';
 
 @Component({
   selector: 'app-tw-body',

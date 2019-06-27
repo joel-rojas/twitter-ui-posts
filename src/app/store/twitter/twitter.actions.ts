@@ -1,7 +1,6 @@
-import { TwitterColumnSubject } from './../../services/local-data/layout-data.config';
 import { Action } from '@ngrx/store';
 import { TwitterPosts } from './twitter.model';
-import { TwitterColumnsStorage } from 'src/app/services/local-data/layout-data.config';
+import { TwitterColumnSubject, TwitterColumnsStorage } from './../../services/local-data/layout-data.config';
 
 export enum TwitterActionTypes {
   LoadTwitterPosts = '[Twitter] Load Twitters Posts',
