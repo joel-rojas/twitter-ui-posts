@@ -1,12 +1,12 @@
 # Twitter Posts App
 
-This responsive web app uses a Twitter REST API endpoint from a custom server [created by me](https://github.com/joel-rojas/twitter-posts-rest-api) to show and handle custom UI functionalities of 10 twitter posts from 3 specific twitter users.
+This responsive [web app](https://joel-rojas.github.io/twitter-posts-app/) uses a Twitter REST API endpoint from a custom server app [created by me](https://github.com/joel-rojas/twitter-posts-rest-api) to show and handle custom UI functionalities of 10 twitter posts from 3 specific twitter users.
 
 ## Motivation
 
 The main reason of developing this app is to show and use some good practices that an Angular 7 app could have. Also to keep up practicing and to understand basic/complex functionalities by some of the integrated libraries like Rxjs and Ngrx; so I hope you found it useful and interesting. :)
 
-Last but not least, the idea to build this app has been proposed by a software company's coding challenge interview I had some months ago but some requirements of it has been modified by me.
+Last but not least, the idea to build this app has been proposed by a software company's coding challenge interview I had some months ago but some requirements of it have been modified by me.
 
 ## Angular Good Practices
 
@@ -46,15 +46,21 @@ The use of this app is pretty straightforward so any user who will interact with
 
 * The layout items are described as the following points:
 
-  1. **_Sort Columns_**: This component works like a checkbox UI component. If it is activated, every twitter posts column is highlighted with dashed borders and enabled to drag n' drop between them. If it is deactivated, twitter posts columns are displayed as normal without the ability to use the drag n' drop functionality. If they are dragged and dropped then their data change between them and their data are reflected on **Increase/Decrease Tweets** components and the localStorage. **Note:** This item can only be used for large screen-width devices, it is hidden for small screen-width ones.
+  1. **_Sort Columns_**: This component works like a checkbox UI component. If it is activated, every twitter posts column is highlighted with dashed borders and enabled to drag n' drop between them. If it is deactivated, twitter posts columns are displayed as normal without the ability to use the drag n' drop functionality. If they are dragged and dropped then their data change between them and they are reflected on **Increase/Decrease Tweets** components and the localStorage. **Note:** This item can only be used for large screen-width devices, it is hidden for small screen-width ones.
 
-  ![sortColumns](https://github.com/joel-rojas/twitter-posts-app/blob/master/docs/images/sortColumns.png#sort-columns)
+    ![sortColumns](https://github.com/joel-rojas/twitter-posts-app/blob/master/docs/images/sortColumns.png)
 
   2. **_Increase/Decrease Tweets_**: This one is split into three UI components which represent the three twitter posts columns. For every component, it has two buttons and number input. Each button has `+` and `-` as labels. Each clicked button will handle how many twitter posts are going to be displayed either in its columns and in the input placed between these two buttons. The maximum shown posts are ten per each column and minimum is one per each. The input is disabled by default which an user cannot change its value manually. By decreasing/increasing twitter posts quantity, these will show as a list of descending-date-created order posts for a single column.
 
+    ![increaseDecreaseTwitterPosts](https://github.com/joel-rojas/twitter-posts-app/blob/master/docs/images/incDecTweets.png)
+
   3. **_Change Theme_**:  This component works like a set of radio buttons, only one of them can be selected. For this case, three UI themes 'radio-buttons' have been created and if one of them is selected then all UI styles are changed in the app. The UI styles that are changed are font-colors, background colors and hovered-buttons colors.
 
+    ![changeTheme](https://github.com/joel-rojas/twitter-posts-app/blob/master/docs/images/changeTheme.png)
+
   4. **_Clear Changes_**: This last one is a simple button that resets default data state shown at the beginning of the app. Specifically, data (twitter-posts data shown as column views) are sorted and the quantity of each one of them gets back to the same default value. These changes are noted visually on edit-layout components and in the column views. Also the UI theme is changed by its default value. These values are referred as well in the browser's localStorage object.
+
+    ![clearChanges](https://github.com/joel-rojas/twitter-posts-app/blob/master/docs/images/clearChanges.png)
 
 * Browser's LocalStorage is created for the first time when the app is loading and it's persisted once created. It saves UI local data which is set with the key name `twitterPostsApp` and its default value as a stringified JSON structure:
 
