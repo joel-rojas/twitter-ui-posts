@@ -241,3 +241,8 @@ html, body {
     border-bottom: 5px solid var(--app-white) !important;
   }
 }
+
+img[src*="#sort-columns"] {
+  margin-left: auto;
+  margin-right: auto;
+}
