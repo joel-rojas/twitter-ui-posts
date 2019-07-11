@@ -85,6 +85,7 @@ For to-do features and as a personal opinion, the app could implement the follow
 * Refactor app to implement folder-by-feature principle of Angular folder structure.
 * It is possible to build different Angular Modules but it could be optional.
 * Split UI style themes into their own files and include them into the main style file.
+* Implement unit testing either on UI components, services or state management files.
 
 ## Tech Stack
 
