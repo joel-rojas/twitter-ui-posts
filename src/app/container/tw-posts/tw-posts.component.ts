@@ -1,9 +1,9 @@
-import { Component, OnInit, OnDestroy, AfterContentInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Store, select } from '@ngrx/store';
 import { Observable, BehaviorSubject, Subscription } from 'rxjs';
 import { AppState } from './../../store';
 import { LoadTwitterPosts, SwitchTwitterPosts, ModifyTwitterPostsQty, ResetTwitterPosts } from './../../store/twitter/twitter.actions';
-import { TwitterUser, TwitterUserSelector } from './../../store/twitter/twitter.model';
+import { TwitterUser, TwitterUserColumnData } from './../../store/twitter/twitter.model';
 import { LayoutDataService } from './../../services/local-data/layout-data.service';
 import { LayoutData, LayoutDataSubject } from './../../services/local-data/layout-data.config';
 import { PostService } from './../../services/ui/post.service';
@@ -13,17 +13,12 @@ import { PostService } from './../../services/ui/post.service';
   templateUrl: './tw-posts.component.html',
   styleUrls: ['./tw-posts.component.css']
 })
-export class TwPostsComponent implements OnInit, AfterContentInit, OnDestroy {
+export class TwPostsComponent implements OnInit, OnDestroy {
   public enableOrderColumn: boolean;
   public defaultStateSubject$: BehaviorSubject<LayoutDataSubject>;
-  public firstColumnQtySubject$: BehaviorSubject<LayoutDataSubject>;
   public latestLayoutData$: Observable<{twitterUsers: TwitterUser[], dataStorage: LayoutData}>;
-  public secondColumnQtySubject$: BehaviorSubject<LayoutDataSubject>;
-  public sortColumnSwitchSubject$: BehaviorSubject<LayoutDataSubject>;
   public subscriptions = new Subscription();
-  public thirdColumnQtySubject$: BehaviorSubject<LayoutDataSubject>;
-  public usersPosts$: Observable<TwitterUser[]>;
-  public usersSelectorsSubject$: BehaviorSubject<TwitterUserSelector[]>;
+  public twitterUserColumnData$: BehaviorSubject<TwitterUserColumnData[]>;
   public firstUserPosts$: Observable<TwitterUser>;
   public secondUserPosts$: Observable<TwitterUser>;
   public thirdUserPosts$: Observable<TwitterUser>;
@@ -31,24 +26,16 @@ export class TwPostsComponent implements OnInit, AfterContentInit, OnDestroy {
     private store: Store<AppState>,
     private postService: PostService, private layoutDataService: LayoutDataService) {
       this.latestLayoutData$ = this.postService.getLatestLayoutData();
-      this.usersPosts$ = this.postService.usersPosts$;
-      this.usersSelectorsSubject$ = this.postService.usersSelectorsSubject$;
-      this.firstColumnQtySubject$ = this.layoutDataService.twitterColumnsSubject$[0];
-      this.secondColumnQtySubject$ = this.layoutDataService.twitterColumnsSubject$[1];
-      this.thirdColumnQtySubject$ = this.layoutDataService.twitterColumnsSubject$[2];
-      this.sortColumnSwitchSubject$ = this.layoutDataService.sortColumnsSubject$;
+      this.twitterUserColumnData$ = this.postService.twitterUserColumnData$;
   }
 
   ngOnInit() {
     this.store.dispatch(new LoadTwitterPosts());
-  }
-  ngAfterContentInit() {
     this.subscriptions.add(
       this.latestLayoutData$.subscribe(({twitterUsers, dataStorage}: {twitterUsers: TwitterUser[], dataStorage: LayoutData}) => {
         this.enableOrderColumn = dataStorage.sortColumns;
         const defaultStateSubjectValue = this.layoutDataService.defaultStatusSubject$.getValue();
         if (defaultStateSubjectValue.isChanged && defaultStateSubjectValue.result) {
-          this.postService.setDefaultUserSelectorsOrder();
           this.store.dispatch(new ResetTwitterPosts());
           return;
         }
@@ -61,7 +48,7 @@ export class TwPostsComponent implements OnInit, AfterContentInit, OnDestroy {
       })
     );
     this.subscriptions.add(
-      this.usersSelectorsSubject$.subscribe(data => {
+      this.twitterUserColumnData$.subscribe(data => {
         this.firstUserPosts$ = this.store.pipe(select(data[0].fn));
         this.secondUserPosts$ = this.store.pipe(select(data[1].fn));
         this.thirdUserPosts$ = this.store.pipe(select(data[2].fn));

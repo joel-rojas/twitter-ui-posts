@@ -1,20 +1,19 @@
+import { UserObj, TwitterUser, TwitterUserColumnData } from './../../store/twitter/twitter.model';
 export interface LayoutData {
   defaultStatus: boolean;
   sortColumns: boolean;
   twitterColumns: TwitterColumnsStorage[];
   twitterTheme: string;
 }
-export interface TwitterColumnsStorage {
+export interface TwitterColumnsStorage extends UserObj {
   value: number;
-  user: string;
 }
 export interface LayoutDataSubject {
   isChanged: boolean;
   result: LayoutDataLike;
 }
-export interface TwitterColumnSubject {
+export interface TwitterColumnSubject extends UserObj {
   index: number;
-  user: string;
   value: number;
 }
 export interface LayoutDataPropChange {
@@ -22,5 +21,4 @@ export interface LayoutDataPropChange {
   data: LayoutDataLike;
 }
 export type LayoutDataLike = boolean|TwitterColumnSubject|string|number;
-
-
+export type TwitterUserLike = TwitterUser|TwitterColumnsStorage|TwitterUserColumnData;

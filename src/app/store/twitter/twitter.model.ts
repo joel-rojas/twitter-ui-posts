@@ -9,6 +9,10 @@ export enum TwitterUsers {
   YCombinator = 'ycombinator'
 }
 
+export interface UserObj {
+  user: string;
+}
+
 export interface User {
   id: string;
   name: string;
@@ -49,9 +53,9 @@ export interface TwitterPostsByUser {
   ycombinator: TwitterPosts[];
 }
 
-export interface TwitterUserSelector {
-  user: string;
+export interface TwitterUserColumnData extends UserObj {
   fn: MemoizedSelector<object, TwitterUser>;
+  maxItems: number;
 }
 
 @Injectable({providedIn: 'root'})
@@ -63,7 +67,8 @@ export class TwitterPostsModel {
   changeTwitterPostsQuantityByUser(users: TwitterUser[], posts: TwitterPosts[], user: string, value: number): TwitterUser[] {
     return users.map(tw => {
       if (tw.user === user) {
-        return {...tw, posts: posts.slice(this.MAX_TWITTER_POSTS - value, this.MAX_TWITTER_POSTS)};
+        const pLength = posts.length;
+        return {...tw, posts: posts.slice(pLength - value, pLength)};
       }
       return tw;
     });

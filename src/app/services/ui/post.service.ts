@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Store, select } from '@ngrx/store';
-import { zip, Observable, combineLatest, BehaviorSubject, EMPTY } from 'rxjs';
+import { zip, Observable, combineLatest, BehaviorSubject, EMPTY,  } from 'rxjs';
 import { catchError, filter, map, take, tap } from 'rxjs/operators';
 import { AppState } from './../../store/index';
 import { selectTwitterPostsByUser,
@@ -8,23 +8,27 @@ import { selectTwitterPostsByUser,
   selectNewsYCombinatorTwitterUser,
   selectYCombinatorTwitterUser
 } from './../../store/twitter/twitter.selectors';
-import { TwitterUser, TwitterUserSelector } from './../../store/twitter/twitter.model';
+import { TwitterUser, TwitterUserColumnData, UserObj, TwitterUsers } from './../../store/twitter/twitter.model';
 import { LayoutDataService } from './../local-data/layout-data.service';
-import { LayoutDataLike, LayoutData, TwitterColumnsStorage, TwitterColumnSubject } from './../local-data/layout-data.config';
+import { LayoutDataLike,
+  LayoutData,
+  TwitterColumnsStorage,
+  TwitterColumnSubject,
+  TwitterUserLike } from './../local-data/layout-data.config';
 
 @Injectable({
   providedIn: 'root'
 })
 export class PostService {
-  public readonly defaultUsersSelectorsOrder: TwitterUserSelector[] =
+  public readonly defaultUsersSelectorsOrder: TwitterUserColumnData[] =
     this.layoutDataService.defaultLocalData.twitterColumns.map(data => {
       const {user} = data;
-      if (user === 'MakeSchool') {
-        return {user, fn: selectMakeSchoolTwitterUser};
-      } else if (user === 'newsycombinator') {
-        return {user, fn: selectNewsYCombinatorTwitterUser};
+      if (user === TwitterUsers.MakeSchool) {
+        return {user, fn: selectMakeSchoolTwitterUser, maxItems: 10};
+      } else if (user === TwitterUsers.NewsYCombinator) {
+        return {user, fn: selectNewsYCombinatorTwitterUser, maxItems: 10};
       }
-      return {user, fn: selectYCombinatorTwitterUser};
+      return {user, fn: selectYCombinatorTwitterUser, maxItems: 10};
     });
   public filledLayoutData$: Observable<LayoutData>;
   public filledUsersPosts$: Observable<TwitterUser[]>;
@@ -32,14 +36,13 @@ export class PostService {
   public layoutData$: Observable<LayoutData>;
   public secondUserPosts$: Observable<TwitterUser>;
   public thirdUserPosts$: Observable<TwitterUser>;
+  public twitterUserColumnData$: BehaviorSubject<TwitterUserColumnData[]> = new BehaviorSubject(null);
   public usersPosts$: Observable<TwitterUser[]>;
-  public usersSelectors: TwitterUserSelector[];
-  public usersSelectorsSubject$: BehaviorSubject<TwitterUserSelector[]>;
+  public userColumnData: TwitterUserColumnData[];
   constructor(private store: Store<AppState>, private layoutDataService: LayoutDataService) {
-    this.usersSelectorsSubject$ = new BehaviorSubject(this.usersSelectors);
     this.setDefaultUserSelectorsOrder();
-    this.layoutData$ = this.layoutDataService.getLayoutDataAsObservable();
-    this.filledLayoutData$ = this.layoutData$.pipe(filter((dataStorage) => dataStorage !== null));
+    this.layoutData$ = this.layoutDataService.getLayoutDataAsSubject();
+    this.filledLayoutData$ = this.layoutData$.pipe(filter(dataStorage => dataStorage !== null));
     this.usersPosts$ = this.store.pipe(select(selectTwitterPostsByUser));
     this.filledUsersPosts$ = this.usersPosts$.pipe(filter((twitterUsers) => twitterUsers.length > 0), take(1));
   }
@@ -60,6 +63,39 @@ export class PostService {
       }
     }
   }
+  changeAppLocalStorageData(setA: TwitterUserLike[], setB: TwitterUserLike[], isDefault: boolean) {
+    const localStorageData = JSON.parse(JSON.stringify(this.layoutDataService.getLayoutData()));
+    const newTwitterColumnValues = setA.map((element, index) => {
+      const {user} = element;
+      const twitterUserFromSetB = this.getSameTwitterUserFromSet(setB, element);
+      let value = (element as TwitterColumnsStorage).value || (twitterUserFromSetB as TwitterColumnsStorage).value;
+      const maxItems = (element as TwitterUserColumnData).maxItems || (twitterUserFromSetB as TwitterUserColumnData).maxItems;
+      if (value > maxItems) {
+        value = maxItems;
+      }
+      this.layoutDataService.saveTwitterSingleColumnSubjectValue({
+        isChanged: true,
+        result: {index, user, value}
+      });
+      const {twitterColumns} = localStorageData;
+      const userFromStorage = this.getSameTwitterUserFromSet(twitterColumns.map(data => ({...data})), element);
+      return Object.assign(userFromStorage, {value});
+    });
+    if (isDefault) {
+      this.userColumnData = this.defaultUsersSelectorsOrder.map(sel => ({...sel})).map(sel => {
+        const userFromSubject = this.getSameTwitterUserFromSet(setB, sel) as TwitterUserColumnData;
+        let value = sel.maxItems;
+        if (value > userFromSubject.maxItems) {
+          value = userFromSubject.maxItems;
+        }
+        return Object.assign(sel, {maxItems: value});
+      });
+    }
+    this.layoutDataService.saveDefaultStateSubjectValue({isChanged: true, result: isDefault});
+    this.saveTwitterUserColumnSubjectValue(this.userColumnData);
+    Object.assign(localStorageData, {defaultStatus: isDefault, twitterColumns: newTwitterColumnValues});
+    this.layoutDataService.setLayoutDataNoObservableOps(this.layoutDataService.dataKey, localStorageData);
+  }
   decreasePostsQtyValue(value: number) {
     return --value;
   }
@@ -73,29 +109,45 @@ export class PostService {
       map(([twitterUsers, dataStorage]: [TwitterUser[], LayoutData]) => ({twitterUsers, dataStorage}))
     );
   }
+  getSameTwitterUserFromSet(set: UserObj[], obj: UserObj): TwitterUserLike {
+    return set.find(sel => sel.user === obj.user) as TwitterUserLike;
+  }
   increasePostsQtyValue(value: number) {
     return ++value;
   }
   isSameTwitterPostsOrderByStorage(twitterColumns: TwitterColumnsStorage[], twitterUsers: TwitterUser[]): boolean {
     return twitterColumns.every((col, idx: number) =>
-      twitterUsers[idx].user === col.user && twitterUsers[idx].posts.length === col.value
+      twitterUsers[idx].user === col.user &&
+      twitterUsers[idx].posts.length === this.layoutDataService.MAX_TWITTER_POSTS_ITEMS
     );
   }
-  saveUsersSelectorSubjectValue(data: TwitterUserSelector[]) {
-    this.usersSelectorsSubject$.next(data);
+  saveTwitterUserColumnSubjectValue(data: TwitterUserColumnData[]) {
+    this.twitterUserColumnData$.next(data);
+  }
+  setDefaultStateData(): Observable<[void, TwitterUserColumnData[]]> {
+    return zip(this.layoutDataService.setDefaultLayoutData(), this.twitterUserColumnData$).pipe(
+      tap(([noOp, twitterUserColumnData]: [void, TwitterUserColumnData[]]) => {
+        const {sortColumns, twitterColumns, twitterTheme} = this.layoutDataService.defaultLocalData;
+        this.layoutDataService.saveSortColumnSubjectValue({isChanged: true, result: sortColumns});
+        this.layoutDataService.saveTwitterThemeColumnSubjectValue({isChanged: true, result: twitterTheme});
+        this.changeAppLocalStorageData(twitterColumns, twitterUserColumnData, true);
+      })
+    );
   }
   setDefaultUserSelectorsOrder() {
-    this.usersSelectors = this.defaultUsersSelectorsOrder.map(sel => ({...sel}));
-    this.saveUsersSelectorSubjectValue(this.usersSelectors);
+    this.userColumnData = this.defaultUsersSelectorsOrder.map(sel => ({...sel}));
+    this.saveTwitterUserColumnSubjectValue(this.userColumnData);
   }
-  setReOrderedSelectors(twitterColumns: TwitterColumnsStorage[]) {
-    this.usersSelectors = twitterColumns.map((col) =>
-      this.usersSelectors.find(sel => sel.user === col.user)
-    );
-    this.saveUsersSelectorSubjectValue(this.usersSelectors);
+  setReorderedTwitterColumns(twitterColumns: TwitterColumnsStorage[], twitterUsers: TwitterUser[]) {
+    this.userColumnData = twitterColumns.map((col) => {
+      const user = this.getSameTwitterUserFromSet(this.userColumnData, col) as TwitterUserColumnData;
+      const userFromAPI = this.getSameTwitterUserFromSet(twitterUsers, col) as TwitterUser;
+      return {...user, maxItems: userFromAPI.posts.length } as TwitterUserColumnData;
+    });
+    this.changeAppLocalStorageData(this.userColumnData, twitterColumns, false);
   }
   switchUsersSelectorsByIdx(previousIndex: number, index: number): void {
-    this.usersSelectors = this.usersSelectors.map((sel, idx, arr) => {
+    this.userColumnData = this.userColumnData.map((sel, idx, arr) => {
       if (idx === previousIndex) {
         return arr[index];
       } else if (idx === index) {
@@ -103,7 +155,7 @@ export class PostService {
       }
       return arr[idx];
     });
-    this.saveUsersSelectorSubjectValue(this.usersSelectors);
+    this.saveTwitterUserColumnSubjectValue(this.userColumnData);
   }
   private switchColumnData(
     index: number, previousIndex: number, firstIdx: number, secondIdx: number, thirdIdx: number): Observable<void | [void, void]> {

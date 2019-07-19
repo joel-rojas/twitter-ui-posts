@@ -35,7 +35,7 @@ export class TwitterEffects {
               const {twitterColumns} = dataStorage;
               const isSameTwitterPostsOrder = this.postService.isSameTwitterPostsOrderByStorage(twitterColumns, twitterUsers);
               if (!isSameTwitterPostsOrder) {
-                this.postService.setReOrderedSelectors(twitterColumns);
+                this.postService.setReorderedTwitterColumns(twitterColumns, twitterUsers);
                 return new ReOrderTwitterPosts({twitterColumns});
               }
               return new NoOpTwitterPosts();

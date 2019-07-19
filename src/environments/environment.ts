@@ -5,7 +5,7 @@
 export const environment = {
   production: false,
   api: {
-    baseURL: 'http://127.0.0.1:7890/api/'
+    baseURL: 'http://127.0.0.1:7890/'
   }
 };
 
