@@ -1,10 +1,10 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { BehaviorSubject, Subscription, Observable, zip } from 'rxjs';
-import { tap } from 'rxjs/operators';
 import { PostService } from '../../services/ui/post.service';
 import { LayoutDataService } from '../../services/local-data/layout-data.service';
 import { LoadingService } from '../../services/ui/loading.service';
 import { LayoutDataLike, LayoutData } from '../../services/local-data/layout-data.config';
+import { TwitterUserColumnData } from './../../store/twitter/twitter.model';
 import { TwitterUser } from '../../store/twitter/twitter.model';
 
 @Component({
@@ -17,6 +17,7 @@ export class TwHeaderComponent implements OnInit, OnDestroy {
   public firstThemeCls = this.layoutDataService.appThemes.FIRST;
   public firstTwColumnLbl = 'First Column';
   public firstTwColumnQty: number;
+  public firstTwColumnMaxQty: number;
   public isFirstThemeActive: boolean;
   public isSecondThemeActive: boolean;
   public isThirdThemeActive: boolean;
@@ -30,6 +31,7 @@ export class TwHeaderComponent implements OnInit, OnDestroy {
   public secondThemeCls = this.layoutDataService.appThemes.SECOND;
   public secondTwColumnLbl = 'Second Column';
   public secondTwColumnQty: number;
+  public secondTwColumnMaxQty: number;
   public selectedTheme: string;
   public sortColumnKeyName: string;
   public subscriptions: Subscription = new Subscription();
@@ -40,12 +42,15 @@ export class TwHeaderComponent implements OnInit, OnDestroy {
   public thirdThemeCls = this.layoutDataService.appThemes.THIRD;
   public thirdTwColumnLbl = 'Third Column';
   public thirdTwColumnQty: number;
+  public thirdTwColumnMaxQty: number;
   public twitterColumnsKeyName: string;
   public twitterThemeKeyName: string;
+  public twitterUserColumnData$: BehaviorSubject<TwitterUserColumnData[]>;
 
   constructor(private postService: PostService, private layoutDataService: LayoutDataService, private loadingService: LoadingService) {
     this.loadingSubject$ = this.loadingService.loadingSubject;
     this.latestLayoutData$ = this.postService.getLatestLayoutData();
+    this.twitterUserColumnData$ = this.postService.twitterUserColumnData$;
     const {SORT_COLUMNS, DEFAULT_STATUS, TWITTER_COLUMNS, TWITTER_THEME} = this.layoutDataService.layoutDataKeys;
     this.sortColumnKeyName = SORT_COLUMNS;
     this.defaultStatusKeyName = DEFAULT_STATUS;
@@ -70,6 +75,13 @@ export class TwHeaderComponent implements OnInit, OnDestroy {
         this.isThirdThemeActive = this.selectedTheme === this.thirdThemeCls;
       }
     ));
+    this.subscriptions.add(
+      this.twitterUserColumnData$.subscribe(data => {
+        this.firstTwColumnMaxQty = data[0].maxItems;
+        this.secondTwColumnMaxQty = data[1].maxItems;
+        this.thirdTwColumnMaxQty = data[2].maxItems;
+      })
+    );
   }
   ngOnDestroy() {
     this.subscriptions.unsubscribe();
@@ -90,19 +102,7 @@ export class TwHeaderComponent implements OnInit, OnDestroy {
   }
   setDefaultLayoutData() {
     this.subscriptions.add(
-      this.layoutDataService.setDefaultLayoutData().pipe(
-        tap(() => {
-          const {sortColumns, twitterColumns, twitterTheme} = this.layoutDataService.defaultLocalData;
-          this.layoutDataService.saveSortColumnSubjectValue({isChanged: true, result: sortColumns});
-          this.layoutDataService.saveTwitterThemeColumnSubjectValue({isChanged: true, result: twitterTheme});
-          twitterColumns.forEach((colStorage, index) =>
-            this.layoutDataService.saveTwitterSingleColumnSubjectValue({
-              isChanged: true,
-              result: {index, user: colStorage.user, value: colStorage.value}
-            })
-          );
-        })
-      ).subscribe()
+      this.postService.setDefaultStateData().subscribe()
     );
   }
   setLayoutData(keyName: string, value: LayoutDataLike) {
@@ -121,7 +121,6 @@ export class TwHeaderComponent implements OnInit, OnDestroy {
   }
   // Events
   onClearLayoutChanges() {
-    this.layoutDataService.saveDefaultStateSubjectValue({isChanged: true, result: true});
     this.setDefaultLayoutData();
   }
   onDecreaseFirstValueEvent(event: number) {

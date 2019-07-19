@@ -1,4 +1,3 @@
-import { PostService } from './../ui/post.service';
 import { Injectable } from '@angular/core';
 import { catchError } from 'rxjs/operators';
 import { of, Observable, BehaviorSubject } from 'rxjs';
@@ -18,14 +17,14 @@ export class LayoutDataService {
     THIRD: 'theme3'
   };
   public readonly dataKey = 'twitterPostsApp';
-  public readonly MAX_TWITTER_POSTS_ITEMS = this.twitterPostsModel.MAX_TWITTER_POSTS;
-  public readonly MIN_TWITTER_POSTS_ITEMS = this.twitterPostsModel.MIN_TWITTER_POSTS;
   public readonly layoutDataKeys = {
     DEFAULT_STATUS: 'defaultStatus',
     SORT_COLUMNS: 'sortColumns',
     TWITTER_COLUMNS: 'twitterColumns',
     TWITTER_THEME: 'twitterTheme'
   };
+  public readonly MAX_TWITTER_POSTS_ITEMS = this.twitterPostsModel.MAX_TWITTER_POSTS;
+  public readonly MIN_TWITTER_POSTS_ITEMS = this.twitterPostsModel.MIN_TWITTER_POSTS;
   public defaultLocalData: LayoutData = {
     defaultStatus: true,
     sortColumns: false,
@@ -69,8 +68,8 @@ export class LayoutDataService {
   getLayoutData(): LayoutData {
     return this.localStorage.getAppLocalStorageData(this.dataKey);
   }
-  getLayoutDataAsObservable(): Observable<LayoutData> {
-    return this.localStorage.layoutDataSubject$.asObservable();
+  getLayoutDataAsSubject(): BehaviorSubject<LayoutData> {
+    return this.localStorage.layoutDataSubject$;
   }
   getTwitterSingleColumnSubject(index: number): BehaviorSubject<LayoutDataSubject> {
     return this.twitterColumnsSubject$[index];
@@ -109,9 +108,8 @@ export class LayoutDataService {
   setDefaultLayoutData(): Observable<void> {
     return this.setLayoutData(this.dataKey, this.defaultLocalData);
   }
-  setSingleLayoutDataProp(key: string, data: LayoutDataLike): Observable<void> {
-    const layoutData = this.changeLayoutData(key, data);
-    return this.setLayoutData(this.dataKey, layoutData);
+  setLayoutDataNoObservableOps(key: string, data: LayoutData) {
+    this.localStorage.setAppLocalStorageDataNoObservable(key, data);
   }
   setLayoutData(key: string, data: LayoutData): Observable<void> {
     return this.localStorage.setAppLocalStorageData(key, data).pipe(
@@ -125,6 +123,10 @@ export class LayoutDataService {
   }
   setSavedLayoutData(layoutData: LayoutData): Observable<void> {
     this.initSubjectsValues(layoutData);
+    return this.setLayoutData(this.dataKey, layoutData);
+  }
+  setSingleLayoutDataProp(key: string, data: LayoutDataLike): Observable<void> {
+    const layoutData = this.changeLayoutData(key, data);
     return this.setLayoutData(this.dataKey, layoutData);
   }
 }

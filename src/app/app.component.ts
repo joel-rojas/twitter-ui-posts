@@ -15,7 +15,7 @@ export class AppComponent implements OnInit, AfterContentChecked, OnDestroy {
   public themeClsObj: object;
   public title = 'twitter-posts-app';
   constructor(private layoutDataService: LayoutDataService) {
-    this.layoutDataSubject$ = this.layoutDataService.getLayoutDataAsObservable();
+    this.layoutDataSubject$ = this.layoutDataService.getLayoutDataAsSubject();
   }
   ngOnInit() {
     this.subscription.add(
