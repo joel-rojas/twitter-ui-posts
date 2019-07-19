@@ -16,7 +16,7 @@ This app has some of the 'good' practices that a developer could consider to app
 
 * Parent and child (Container & presentational) UI components are created and split into their own namespaces. Although Angular docs suggest to structure your app's folders with the [Folders-by-feature principle](https://angular.io/guide/styleguide#overall-structural-guidelines), it's up to the developer to apply it.
 
-* Use of HTTPInterceptor service to handle succeeded/failed calls of the APIs, to show/hide a custom loading-mask UI component and to show an error message if the app couldn't load API data properly.
+* Use of HTTPInterceptor service to handle succeeded/failed call of the API, to show/hide a custom loading-mask UI component and to show an error message if the app couldn't load API data properly.
 
 * Use of Rxjs operators to specifically set the latest data to the app's state by combining data from API and localStorage. If any data has been changed manually on the app and the browser is reloaded, localStorage data will persist and format the data shown on the app.
 
@@ -40,7 +40,7 @@ The use of this app is pretty straightforward so any user who will interact with
 
 ## Features
 
-* App's API calls are made to a custom server, as I mentioned in the description part, which is a REST API server working in a AWS EC2 instance.
+* API call of the app is made to a custom server, as I mentioned in the description part, which is a REST API server working in a AWS EC2 instance.
 
 * While API data has finished to load and render, you'll see a button called **Edit Layout** placed on the right-side of the header component for large screen width-devices and as a menu-item button when navbar menu button is clicked for small screen-width ones. If it is pressed, it will show different options as UI menu items to interact with the layout of the app.
 
@@ -83,6 +83,7 @@ For to-do features and as a personal opinion, the app could implement the follow
 
 * Create an abstraction layer which splits and comunicates UI components and state data in a single Angular service.
 * Refactor app to implement folder-by-feature principle of Angular folder structure.
+* Implement custom Typescript namespaces to group and load integrated interfaces in a ordered manner.
 * It is possible to build different Angular Modules but it could be optional.
 * Split UI style themes into their own files and include them into the main style file.
 * Implement unit testing either on UI components, services or state management files.
