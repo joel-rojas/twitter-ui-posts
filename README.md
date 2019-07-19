@@ -40,7 +40,7 @@ The use of this app is pretty straightforward so any user who will interact with
 
 ## Features
 
-* API call of the app is made to a custom server, as I mentioned in the description part, which is a REST API server working in a AWS EC2 instance.
+* API call of the app is made to a custom server, as I mentioned in the description part, which is a REST API server working in a AWS EC2 instance. If the API call fails then a custom error message will be shown at the middle of the screen. **Note:** It is possible to get less posts data per twitter user (max-posts-quantity: 10). It could happen since any user could just remove previous twitter posts. However, that API feature was a bug and now is fixed on the app, so it will reflect the max twitter posts per user delivered by the API endpoint.
 
 * While API data has finished to load and render, you'll see a button called **Edit Layout** placed on the right-side of the header component for large screen width-devices and as a menu-item button when navbar menu button is clicked for small screen-width ones. If it is pressed, it will show different options as UI menu items to interact with the layout of the app.
 
