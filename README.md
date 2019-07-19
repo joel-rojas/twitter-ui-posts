@@ -82,6 +82,20 @@ The use of this app is pretty straightforward so any user who will interact with
 For to-do features and as a personal opinion, the app could implement the following:
 
 * Create an abstraction layer which splits and comunicates UI components and state data in a single Angular service.
+* Implement missing localStorage properties in a custom Ngrx state data in order to improve data operations/manipulation on them throughout the app. For instance:
+
+```javascript
+import {
+  twitterReducerFn,
+  uiReducerFn
+} from 'state/index';
+  //On global state
+  {
+    ui: uiReducerFn
+    twitter: twitterReducerFn
+  }
+```
+
 * Refactor app to implement folder-by-feature principle of Angular folder structure.
 * Implement custom Typescript namespaces to group and load integrated interfaces in a ordered manner.
 * It is possible to build different Angular Modules but it could be optional.
