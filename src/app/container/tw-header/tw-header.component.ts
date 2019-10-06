@@ -45,12 +45,10 @@ export class TwHeaderComponent implements OnInit, OnDestroy {
   public thirdTwColumnMaxQty: number;
   public twitterColumnsKeyName: string;
   public twitterThemeKeyName: string;
-  public twitterUserColumnData$: BehaviorSubject<TwitterUserColumnData[]>;
 
   constructor(private postService: PostService, private layoutDataService: LayoutDataService, private loadingService: LoadingService) {
     this.loadingSubject$ = this.loadingService.loadingSubject;
     this.latestLayoutData$ = this.postService.getLatestLayoutData();
-    this.twitterUserColumnData$ = this.postService.twitterUserColumnData$;
     const {SORT_COLUMNS, DEFAULT_STATUS, TWITTER_COLUMNS, TWITTER_THEME} = this.layoutDataService.layoutDataKeys;
     this.sortColumnKeyName = SORT_COLUMNS;
     this.defaultStatusKeyName = DEFAULT_STATUS;
@@ -70,18 +68,14 @@ export class TwHeaderComponent implements OnInit, OnDestroy {
         this.secondTwColumnQty = secondCol.value;
         this.thirdTwColumnQty = thirdCol.value;
         this.selectedTheme = twitterTheme;
+        this.firstTwColumnMaxQty = twitterUsers[0].maxPosts;
+        this.secondTwColumnMaxQty = twitterUsers[1].maxPosts;
+        this.thirdTwColumnMaxQty = twitterUsers[2].maxPosts;
         this.isFirstThemeActive = this.selectedTheme === this.firstThemeCls;
         this.isSecondThemeActive = this.selectedTheme === this.secondThemeCls;
         this.isThirdThemeActive = this.selectedTheme === this.thirdThemeCls;
       }
     ));
-    this.subscriptions.add(
-      this.twitterUserColumnData$.subscribe(data => {
-        this.firstTwColumnMaxQty = data[0].maxItems;
-        this.secondTwColumnMaxQty = data[1].maxItems;
-        this.thirdTwColumnMaxQty = data[2].maxItems;
-      })
-    );
   }
   ngOnDestroy() {
     this.subscriptions.unsubscribe();
@@ -90,7 +84,7 @@ export class TwHeaderComponent implements OnInit, OnDestroy {
     const subject = this.layoutDataService.twitterColumnsSubject$[colIndex].getValue();
     const subjectData = this.postService.getTwitterSingleColumnSubjectResult(subject.result);
     const newValue = type ? this.postService.increasePostsQtyValue(value) : this.postService.decreasePostsQtyValue(value);
-    const valueToSave = {index: colIndex, user: subjectData.user, value: newValue};
+    const valueToSave = {index: colIndex, user: subjectData.user, value: newValue, maxPosts: subjectData.maxPosts};
     this.layoutDataService.saveDefaultStateSubjectValue({isChanged: true, result: false});
     this.layoutDataService.saveTwitterSingleColumnSubjectValue({isChanged: true, result: valueToSave});
     this.setLayoutData(this.twitterColumnsKeyName, valueToSave);

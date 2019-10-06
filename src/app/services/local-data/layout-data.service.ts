@@ -5,7 +5,7 @@ import { LocalStorageService } from './local-storage.service';
 import { LayoutData, LayoutDataLike, LayoutDataSubject,
   TwitterColumnsStorage, TwitterColumnSubject, LayoutDataPropChange } from './layout-data.config';
 import { LoadingService } from '../ui/loading.service';
-import { TwitterPostsModel } from '../../store/twitter/twitter.model';
+import { TwitterPostsModel, TwitterUser } from '../../store/twitter/twitter.model';
 
 @Injectable({
   providedIn: 'root'
@@ -41,6 +41,7 @@ export class LayoutDataService {
     private localStorage: LocalStorageService) {
       this.initSubjectsValues(this.defaultLocalData);
   }
+  // Methods
   changeLayoutData(key: string, data: LayoutDataLike): LayoutData {
     const layoutData = this.getLayoutData();
     const {DEFAULT_STATUS, SORT_COLUMNS, TWITTER_COLUMNS, TWITTER_THEME} = this.layoutDataKeys;
@@ -89,7 +90,11 @@ export class LayoutDataService {
     this.sortColumnsSubject$ = new BehaviorSubject<LayoutDataSubject>({isChanged: false, result: data.sortColumns});
     this.twitterColumnsSubject$ = data.twitterColumns.map(
       (value: TwitterColumnsStorage, index: number) =>
-        new BehaviorSubject<LayoutDataSubject>({isChanged: false, result: {index, user: value.user, value: value.value}}));
+        new BehaviorSubject<LayoutDataSubject>({
+          isChanged: false,
+          result: {index, user: value.user, value: value.value, maxPosts: this.MAX_TWITTER_POSTS_ITEMS}
+      })
+    );
     this.twitterThemeSubject$ = new BehaviorSubject<LayoutDataSubject>({isChanged: false, result: data.twitterTheme});
   }
   saveDefaultStateSubjectValue(data: LayoutDataSubject) {

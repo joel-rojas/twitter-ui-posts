@@ -15,6 +15,7 @@ export interface LayoutDataSubject {
 export interface TwitterColumnSubject extends UserObj {
   index: number;
   value: number;
+  maxPosts: number;
 }
 export interface LayoutDataPropChange {
   key: string;

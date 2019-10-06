@@ -58,12 +58,11 @@ export class TwPostsComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.subscriptions.unsubscribe();
   }
-  // Methods
   changeTwitterPostsQtyBySubjectValue(subject: LayoutDataSubject, data: LayoutData) {
-    const {index, value, user} = this.postService.getTwitterSingleColumnSubjectResult(subject.result);
+    const {index, value, user, maxPosts} = this.postService.getTwitterSingleColumnSubjectResult(subject.result);
     if (subject.isChanged) {
-      this.layoutDataService.saveTwitterSingleColumnSubjectValue({isChanged: false, result: {index, user, value}});
-      this.store.dispatch(new ModifyTwitterPostsQty({index, user, value}));
+      this.layoutDataService.saveTwitterSingleColumnSubjectValue({isChanged: false, result: {index, user, value, maxPosts}});
+      this.store.dispatch(new ModifyTwitterPostsQty({index, user, value, maxPosts}));
     }
   }
   // Events

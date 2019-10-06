@@ -45,6 +45,7 @@ export interface TwitterUser {
   id: number;
   user: string;
   posts: TwitterPosts[];
+  maxPosts: number;
 }
 
 export interface TwitterPostsByUser {
@@ -55,7 +56,6 @@ export interface TwitterPostsByUser {
 
 export interface TwitterUserColumnData extends UserObj {
   fn: MemoizedSelector<object, TwitterUser>;
-  maxItems: number;
 }
 
 @Injectable({providedIn: 'root'})
@@ -97,7 +97,9 @@ export class TwitterPostsModel {
     });
   }
   getTwitterUsersByTwitterPosts(filteredByUser: TwitterPostsByUser): TwitterUser[] {
-    return Object.keys(filteredByUser).map((key, idx) => ({id: idx, user: key, posts: filteredByUser[key]}));
+    return Object.keys(filteredByUser).map((key, idx) => ({
+      id: idx, user: key, posts: filteredByUser[key], maxPosts: filteredByUser[key].length
+    }));
   }
   reorderTwitterPostsByLocalStorage(twitterColumns: TwitterColumnsStorage[], users: TwitterUser[]): TwitterUser[] {
     return twitterColumns.map((col, idx) => {
